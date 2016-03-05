@@ -1,0 +1,13 @@
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\bin\Microsoft.PythonTools.WebRole.dll
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\obj\Debug\attach_server.py
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\obj\Debug\visualstudio_py_debugger.py
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\obj\Debug\visualstudio_py_repl.py
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\obj\Debug\visualstudio_py_util.py
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\obj\Debug\__init__.py
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\obj\Debug\__main__.py
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\bin\AzureSetup.cfg
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\bin\Microsoft.PythonTools.AzureSetup.exe
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\bin\Microsoft.PythonTools.AzureSetup.exe.config
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\bin\wfastcgi.py
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\obj\Debug\web.config
+C:\Users\Jaw\Documents\Visual Studio 2013\Projects\DjangoProject_SOEN341\DjangoProject_SOEN341\obj\Debug\web.debug.config

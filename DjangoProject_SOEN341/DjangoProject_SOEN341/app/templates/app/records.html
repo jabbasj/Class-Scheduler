@@ -1,0 +1,12 @@
+﻿{% extends "app/layout.html" %}
+{% block content %}
+{% if user.is_authenticated %}    
+
+<h2>{{ title }}</h2>
+<h3>{{ message }}</h3>
+
+{% else %}
+    <p class="lead">Please log into your account to view your schedule</p>
+{% endif %}
+
+{% endblock %}
