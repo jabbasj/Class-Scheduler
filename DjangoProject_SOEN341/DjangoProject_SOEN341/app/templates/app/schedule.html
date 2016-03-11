@@ -594,4 +594,14 @@
     <p class="lead">Please log into your account to view your schedule</p>
 {% endif %}
 
+{% if timeslots %}
+    <p>Test all timeslots:</p>
+
+        {% for timeslot in timeslots %}
+            <li>{{ timeslot.starthour }} , {{ timeslot.endhour }}, {{ timeslot.day }}</li>
+        {% endfor %}
+
+    {% else %}
+{% endif %}
+
 {% endblock %}

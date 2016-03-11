@@ -46,6 +46,7 @@ def about(request):
         {
             'title':'About',
             'message':'Your application description page.',
+            'courses': Courses.objects.all(),
             'year':datetime.now().year,
         })
     )
@@ -88,6 +89,7 @@ def schedule(request):
         context_instance = RequestContext(request,
         {
             'title':'Schedule',
+            'timeslots': Timeslots.objects.all(),
             'message':'Your schedule page.',
             'year':datetime.now().year,
         })

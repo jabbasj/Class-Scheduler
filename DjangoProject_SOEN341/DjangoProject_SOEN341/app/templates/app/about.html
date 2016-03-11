@@ -7,4 +7,14 @@
 
 <p>Use this area to provide additional information.</p>
 
+{% if courses %}
+    <p>Test all courses:</p>
+
+        {% for course in courses %}
+            <li>{{ course.cid.cid }} , {{ course.semester }}, {{ course.year }}</li>
+        {% endfor %}
+
+    {% else %}
+{% endif %}
+
 {% endblock %}
