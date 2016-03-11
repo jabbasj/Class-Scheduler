@@ -1,0 +1,48 @@
+﻿{% extends "app/layout.html" %}
+{% block content %}
+
+
+{% if user.is_authenticated %} 
+
+<div class="row">
+    <br />
+    <h2>{{ title }}</h2>
+
+    {% if student %}
+        <div class="table">
+            <div style="text-align:right">
+                {{ date }}
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <h3>{{ student.lastname }}, {{ student.firstname }}</h3>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <th class="col-xs-1" scope="row">ID</th>
+                        <td class="col-xs-3">{{ student.sid }}</td>                            
+                    </tr>
+                    <tr>
+                        <th class="col-xs-1" scope="row">E-mail</th>
+                        <td class="col-xs-3">{{ student.email }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+          
+    {% else %}
+                <strong>There are no students present.</strong>
+    {% endif %}
+
+</div>
+{% else %}
+    <p class="lead">Please log into your account to view your schedule</p>
+{% endif %}
+
+
+{% endblock %}
