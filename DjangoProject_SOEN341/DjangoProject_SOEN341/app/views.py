@@ -54,13 +54,16 @@ def about(request):
 def profile(request):
     """Renders the profile page."""
     assert isinstance(request, HttpRequest)
+    student = None
+    if (request.user.is_authenticated()):
+        student = Students.objects.get(email=request.user)
     return render(
         request,
         'app/profile.html',
         context_instance = RequestContext(request,
         {
             'title':'Profile',
-            'student': Students.objects.get(email=request.user),
+            'student': student,
             'date':datetime.now(),
             'year':datetime.now().year,
         })
@@ -69,13 +72,17 @@ def profile(request):
 def record(request):
     """Renders the academic record page."""
     assert isinstance(request, HttpRequest)
+    completed_courses = None
+    if (request.user.is_authenticated()):
+        completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True)
+
     return render(
         request,
         'app/records.html',
         context_instance = RequestContext(request,
         {
             'title':'Academic Record',
-            'completed_courses': Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True),
+            'completed_courses': completed_courses,
             'year':datetime.now().year,
         })
     )
