@@ -9,7 +9,7 @@ from app.forms import BootstrapAuthenticationForm
 
 from home.views import home
 #from app.views import contact
-#from app.views import about
+from app.views import about
 from userprofile.views import profile
 from record.views import record
 from schedule.views import schedule
@@ -37,7 +37,7 @@ urlpatterns = [
     #url(r'^schedule', schedule, name='schedule'),
     url(r'^schedule/', include('schedule.urls')),
     #url(r'^contact$', contact, name='contact'),
-    #url(r'^about', about, name='about'),
+    url(r'^about', about, name='about'),
     url(r'^login/$',
         login,
         {
