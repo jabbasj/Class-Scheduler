@@ -14,7 +14,7 @@ def record(request):
 
     return render(
         request,
-        'app/records.html',
+        'record/records.html',
         context_instance = RequestContext(request,
         {
             'title':'Academic Record',

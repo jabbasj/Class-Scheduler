@@ -10,7 +10,7 @@ def schedule(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/schedule.html',
+        'schedule/schedule.html',
         context_instance = RequestContext(request,
         {
             'title':'Schedule',

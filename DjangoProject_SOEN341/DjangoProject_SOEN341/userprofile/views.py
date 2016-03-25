@@ -13,7 +13,7 @@ def profile(request):
         student = Students.objects.get(email=request.user)
     return render(
         request,
-        'app/profile.html',
+        'userprofile/profile.html',
         context_instance = RequestContext(request,
         {
             'title':'Profile',

@@ -10,7 +10,7 @@ def workshop(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/workshop.html',
+        'workshop/workshop.html',
         context_instance = RequestContext(request,
         {
             'title':'Workshop',

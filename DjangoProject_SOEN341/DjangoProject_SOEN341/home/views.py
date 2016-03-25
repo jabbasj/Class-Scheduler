@@ -10,7 +10,7 @@ def home(request):
     assert isinstance(request, HttpRequest)
     return render(
         request,
-        'app/index.html',
+        'home/index.html',
         context_instance = RequestContext(request,
         {
             'title':'Home Page',
