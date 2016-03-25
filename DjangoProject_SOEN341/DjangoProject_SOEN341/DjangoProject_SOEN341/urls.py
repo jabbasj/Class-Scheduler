@@ -28,6 +28,7 @@ admin.autodiscover()
 urlpatterns = [
     # Examples:
     url(r'^$', home, name='home'),
+    #url(r'^home', include('home.urls')),
     url(r'^profile', profile, name='profile'),
     url(r'^record', record, name='record'),
     url(r'^workshop', workshop, name='workshop'),
