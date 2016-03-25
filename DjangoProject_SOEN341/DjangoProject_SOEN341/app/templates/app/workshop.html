@@ -1,7 +1,7 @@
 ﻿{% extends "app/layout.html" %}
 {% block content %}
 
-{% if user.is_authenticated %} 
+{% if user.is_authenticated %}
 
 <h2>{{ title }}</h2>
 
@@ -21,7 +21,7 @@
         {% for prereq in prerequisites %}
             <li>{{ prereq.pid }} , {{ prereq.rid }}</li>
         {% endfor %}
-            
+
     {% else %}
     {% endif %}
 

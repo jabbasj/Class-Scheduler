@@ -7,13 +7,13 @@ from django.conf.urls import patterns, url
 from app.forms import BootstrapAuthenticationForm
 
 
-from app.views import home
+from home.views import home
 #from app.views import contact
 #from app.views import about
-from app.views import profile
-from app.views import record
-from app.views import schedule
-from app.views import workshop
+from userprofile.views import profile
+from record.views import record
+from schedule.views import schedule
+from workshop.views import workshop
 
 from django.contrib.auth.views import login
 from django.contrib.auth.views import logout
