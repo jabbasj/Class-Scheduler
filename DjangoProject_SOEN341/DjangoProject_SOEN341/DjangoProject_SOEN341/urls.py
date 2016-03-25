@@ -27,12 +27,15 @@ admin.autodiscover()
 
 urlpatterns = [
     # Examples:
-    url(r'^$', home, name='home'),
-    #url(r'^home', include('home.urls')),
-    url(r'^profile', profile, name='profile'),
-    url(r'^record', record, name='record'),
-    url(r'^workshop', workshop, name='workshop'),
-    url(r'^schedule', schedule, name='schedule'),
+    url(r'^$', home, name='home'), #keep like this for home view to be homepage
+    #url(r'^profile', profile, name='profile'),
+    url(r'^profile/', include('userprofile.urls')),
+    #url(r'^record', record, name='record'),
+    url(r'^record/', include('record.urls')),
+    #url(r'^workshop', workshop, name='workshop'),
+    url(r'^workshop/', include('workshop.urls')),
+    #url(r'^schedule', schedule, name='schedule'),
+    url(r'^schedule/', include('schedule.urls')),
     #url(r'^contact$', contact, name='contact'),
     #url(r'^about', about, name='about'),
     url(r'^login/$',
