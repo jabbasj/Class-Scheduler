@@ -1,6 +1,29 @@
 ﻿{% extends "app/layout.html" %}
 {% block content %}
-{% if user.is_authenticated %}    
+{% if user.is_authenticated %}  
+        <div class="container">
+            <form>
+            <label>Semester
+                <select class="form-control">
+                    <option>Fall</option>
+                    <option>Winter</option>
+                    <option>Summer</option>
+                </select>
+            </label>
+            <label>Year
+                <select class="form-control">
+                    <option>2016</option>
+                    <option>2017</option>
+                    <option>2018</option>
+                    <option>2019</option>
+                    <option>2020</option>
+                    <option>2021</option>
+                </select>
+            </label>
+            <label><br/>
+                <input class="btn btn-default" type="submit" value="View">
+            </form>
+        </div> 
         <div class="container">
             <table class="table table-bordered table-striped">
                 <tr class="info">
