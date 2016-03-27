@@ -2,7 +2,31 @@
 {% block content %}
 
 
-{% if user.is_authenticated %} 
+{% if user.is_authenticated %}
+<script>
+    function change_email_overlay() {
+        el = document.getElementById("change_email_overlay");
+        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+    }
+
+    function change_password_overlay() {
+        el = document.getElementById("change_password_overlay");
+        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+    }
+</script>
+
+{% if pwd_change_success == True or email_change_success == True %}
+    <div class="alert alert-success">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Success!</strong> Information successfully updated!
+    </div>
+{% elif pwd_change_success == False or email_change_success == False %}
+    <div class="alert alert-danger">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Error!</strong> Information provided is invalid!
+    </div>
+{% endif %}
+
 
 <div class="row">
     <br />
@@ -11,7 +35,7 @@
     {% if student %}
         <div class="table">
             <div style="text-align:right">
-                {{ date }}
+                {{ date }} {{email_change_success}}
             </div>
             <table class="table">
                 <thead>
@@ -29,7 +53,11 @@
                     </tr>
                     <tr>
                         <th class="col-xs-1" scope="row">E-mail</th>
-                        <td class="col-xs-3">{{ student.email }}</td>
+                        <td class="col-xs-3">{{ student.email }}  <button type="button" class="btn btn-warning btn-xs" onclick="change_email_overlay()">Change</button></td>
+                    </tr>
+                    <tr>
+                        <th class="col-xs-1" scope="row">Password</th>
+                        <td class="col-xs-3">*********  <button type="button" class="btn btn-danger btn-xs" onclick="change_password_overlay()">Change</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -40,6 +68,40 @@
     {% endif %}
 
 </div>
+
+<div id="change_email_overlay">
+     <div>
+         <h4>Change your e-mail</h4></p><hr />
+         <form method="post">
+          {% csrf_token %}
+
+          {{ change_email_form }}
+
+         <hr />
+
+         <button type="button" class="btn btn-danger btn-xs" onclick="change_email_overlay()">Cancel</button>
+         <button type="submit" class="btn btn-success btn-xs" value="OK" onclick="change_email_overlay()">Submit</button>
+         </form>
+     </div>
+</div>
+
+<div id="change_password_overlay">
+     <div>
+         <h4>Change your password</h4><hr />
+         <form method="post">
+          {% csrf_token %}
+
+          {{ change_password_form }}
+
+         <hr />
+            
+         <button type="button" class="btn btn-danger btn-xs" onclick="change_password_overlay()">Cancel</button>
+         <button type="submit" class="btn btn-success btn-xs" value="OK" onclick="change_password_overlay()">Submit</button>             
+         </form>  
+     </div>
+</div>
+
+
 {% else %}
     <p class="lead">Please log into your account to view your schedule</p>
 {% endif %}
