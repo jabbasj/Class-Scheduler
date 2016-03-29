@@ -4168,7 +4168,10 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar {
   position: relative;
-  min-height: 50px;
+  width: 100%;
+  top: -50px;
+  padding: 0px;
+  min-height: 20px;
   margin-bottom: 20px;
   border: 1px solid transparent;
 }
@@ -4277,10 +4280,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-brand {
   float: left;
   height: 50px;
-  padding: 15px 15px;
+  padding: 0px 0px;
   font-size: 18px;
   line-height: 20px;
-  padding-top: 0;
 }
 .navbar-brand:hover,
 .navbar-brand:focus {
@@ -4330,8 +4332,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-nav > li > a {
   padding-top: 10px;
   padding-bottom: 10px;
-  line-height: 75px;
-  height: 100px;
+  margin-bottom: -20px;
+  line-height: 20px;
 }
 @media (max-width: 767px) {
   .navbar-nav .open .dropdown-menu {
@@ -6762,5 +6764,13 @@ button.close {
 th,
 td {
     text-align: center;
+}
+@media (max-width: 767px) {
+    .navbar-nav > li > a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 0px;
+        line-height: 20px;
+    }
 }
 /*# sourceMappingURL=bootstrap.css.map */
