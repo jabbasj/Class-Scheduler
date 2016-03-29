@@ -2,10 +2,12 @@
 {% block content %}
 {% if user.is_authenticated %}    
 
-<h2>{{ title }}</h2>
+<h2>{{ title }}</h2><form method="post">{% csrf_token %}<button type="submit" class="btn btn-success btn-xs">Download PDF</button></form>
 
     {% if completed_courses %}
     <p>Courses finished:</p>
+    <form method="post">
+    </form>
             {% for course in completed_courses %}
                 <li>{{ course.cid }} </li>
             {% endfor %}           
