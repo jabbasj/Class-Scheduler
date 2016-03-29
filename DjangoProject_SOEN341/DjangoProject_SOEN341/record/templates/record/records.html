@@ -1,5 +1,10 @@
 ﻿{% extends "app/layout.html" %}
 {% block content %}
+<style>
+.navbar {
+    top: -70px;
+}  
+</style>
 {% if user.is_authenticated %}    
 
 <h2>{{ title }}</h2><form method="post">{% csrf_token %}<button type="submit" class="btn btn-success btn-xs">Download PDF</button></form>
