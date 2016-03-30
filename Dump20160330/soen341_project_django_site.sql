@@ -18,28 +18,29 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `sequence`
+-- Table structure for table `django_site`
 --
 
-DROP TABLE IF EXISTS `sequence`;
+DROP TABLE IF EXISTS `django_site`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sequence` (
-  `cId` varchar(8) NOT NULL,
-  `semester` varchar(6) NOT NULL,
-  `year` int(11) NOT NULL,
-  PRIMARY KEY (`cId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `django_site` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `domain` varchar(100) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `django_site_domain_a2e37b91_uniq` (`domain`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sequence`
+-- Dumping data for table `django_site`
 --
 
-LOCK TABLES `sequence` WRITE;
-/*!40000 ALTER TABLE `sequence` DISABLE KEYS */;
-INSERT INTO `sequence` VALUES ('BIOL 206','cegep',0),('BIOL 261','cegep',0),('CHEM 221','cegep',0),('COEN 346','winter',2),('COMP 232','fall',1),('COMP 248','fall',1),('COMP 249','winter',1),('COMP 348','fall',2),('COMP 352','summer',2),('ELEC 273','summer',2),('ELEC 321','fall',2),('ENCS 282','fall',2),('ENGR 201','fall',1),('ENGR 202','summer',1),('ENGR 213','fall',1),('ENGR 233','summer',1),('ENGR 242','winter',1),('ENGR 243','winter',1),('ENGR 251','fall',2),('ENGR 361','winter',2),('MECH 221','winter',1),('PHYS 252','cegep',0),('SOEN 228','summer',1),('SOEN 287','summer',1);
-/*!40000 ALTER TABLE `sequence` ENABLE KEYS */;
+LOCK TABLES `django_site` WRITE;
+/*!40000 ALTER TABLE `django_site` DISABLE KEYS */;
+INSERT INTO `django_site` VALUES (1,'example.com','example.com');
+/*!40000 ALTER TABLE `django_site` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-11  4:01:19
+-- Dump completed on 2016-03-30 18:14:06

@@ -18,31 +18,37 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `auth_user_user_permissions`
+-- Table structure for table `registered`
 --
 
-DROP TABLE IF EXISTS `auth_user_user_permissions`;
+DROP TABLE IF EXISTS `registered`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `auth_user_user_permissions` (
+CREATE TABLE `registered` (
+  `studentId` int(11) NOT NULL,
+  `cId` varchar(8) NOT NULL,
+  `sectionId` varchar(8) NOT NULL,
+  `semester` varchar(6) NOT NULL,
+  `year` int(11) NOT NULL,
+  `type` varchar(3) NOT NULL,
+  `grade` varchar(4) DEFAULT NULL,
+  `finished` tinyint(1) DEFAULT '0',
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `permission_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `auth_user_user_permissions_user_id_14a6b632_uniq` (`user_id`,`permission_id`),
-  KEY `auth_user_user_perm_permission_id_1fbb5f2c_fk_auth_permission_id` (`permission_id`),
-  CONSTRAINT `auth_user_user_perm_permission_id_1fbb5f2c_fk_auth_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `auth_permission` (`id`),
-  CONSTRAINT `auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY `studentId` (`studentId`),
+  KEY `cId` (`cId`,`sectionId`,`semester`,`year`,`type`),
+  CONSTRAINT `registered_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `students` (`sId`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `auth_user_user_permissions`
+-- Dumping data for table `registered`
 --
 
-LOCK TABLES `auth_user_user_permissions` WRITE;
-/*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
+LOCK TABLES `registered` WRITE;
+/*!40000 ALTER TABLE `registered` DISABLE KEYS */;
+INSERT INTO `registered` VALUES (10001011,'COMP 232','NN','winter',2016,'lec','43',1,1),(10001011,'COMP 232','NN','winter',2016,'lec','43',0,2),(10002032,'COMP 332','NN','winter',2016,'lec','43',0,3);
+/*!40000 ALTER TABLE `registered` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-11  4:01:19
+-- Dump completed on 2016-03-30 18:14:06

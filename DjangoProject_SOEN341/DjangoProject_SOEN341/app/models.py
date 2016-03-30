@@ -15,6 +15,7 @@ class Courses(models.Model):
     timeslot1 = models.ForeignKey('Timeslots', models.DO_NOTHING, db_column='timeSlot1', related_name='timeslot1')  # Field name made lowercase.
     timeslot2 = models.ForeignKey('Timeslots', models.DO_NOTHING, db_column='timeSlot2', related_name='timeslot2')  # Field name made lowercase.
     description = models.CharField(max_length=1000, blank=True, null=True)
+    capacity = models.IntegerField()
 
     objects = models.Manager()
 
