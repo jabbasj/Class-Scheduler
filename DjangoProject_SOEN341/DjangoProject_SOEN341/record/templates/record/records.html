@@ -7,11 +7,10 @@
 </style>
 {% if user.is_authenticated %}    
 
-<h2>{{ title }}</h2><form method="post">{% csrf_token %}<button type="submit" class="btn btn-success btn-xs">Download PDF</button></form>
-    <div style="text-align:right">
-                    {{ date }}
-                </div>
-
+<h2>{{ title }}</h2>
+<form method="post" style="text-align:right">{% csrf_token %}<button type="submit" class="btn btn-success btn-xs">Download PDF</button></form>
+    
+<div style="text-align:right"></div>
     {% if completed_courses %}
             
             <table class="table">

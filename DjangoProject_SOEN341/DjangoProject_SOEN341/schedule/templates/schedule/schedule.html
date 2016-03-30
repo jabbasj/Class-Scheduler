@@ -6,27 +6,53 @@
 }  
 </style>
 {% if user.is_authenticated %}  
-        <div class="container">
-            <form>
+
+<!--- for list viewing, to remove -->
+{% if courses_registered %}
+    Courses registered:
+    {% for course in courses_registered %}
+        <li> {{course.id}} {{course.semester}} {{course.year}} {{course.grade}}</li>
+    {% endfor %}
+{% endif %}
+
+{% if courses_pending_confirmation %}
+    Courses pending confirmation:
+    {% for course in courses_pending_confirmation %}
+        <li> {{course.id}} {{course.semester}} {{course.year}} {{course.grade}}</li>
+    {% endfor %}
+{% endif %}
+<!--- for list viewing -->
+
+{% if chosen_semester and chosen_year %}
+    <h2> {{ chosen_semester }}, {{ chosen_year }}</h2>
+{% else %}
+    <h2>Please choose a semester...</h2>
+{% endif %}
+
+        <div class="container"  style="text-align:right">
+            <form method="POST">
+            {% csrf_token %}
             <label>Semester
-                <select class="form-control">
-                    <option>Fall</option>
-                    <option>Winter</option>
-                    <option>Summer</option>
+                <select name="semester" class="form-control">
+                    <<option selected disabled>Select Semester</option>
+                    <option value="Fall">Fall</option>
+                    <option value="Winter">Winter</option>
+                    <option value="Summer">Summer</option>
                 </select>
             </label>
             <label>Year
-                <select class="form-control">
-                    <option>2016</option>
-                    <option>2017</option>
-                    <option>2018</option>
-                    <option>2019</option>
-                    <option>2020</option>
-                    <option>2021</option>
+                <select name="year" class="form-control">
+                    <option selected disabled>Select Year</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
                 </select>
             </label>
             <label><br/>
-                <input class="btn btn-default" type="submit" value="View">
+                <button type="submit" class="btn btn-success btn-md" name="view">View</button>
             </form>
         </div> 
         <div class="container">
@@ -626,7 +652,7 @@
     <p>Test all timeslots:</p>
 
         {% for timeslot in timeslots %}
-            <li>{{ timeslot.starthour }} , {{ timeslot.endhour }}, {{ timeslot.day }}</li>
+            <li>id: {{ timeslot.id }}, starthour: {{ timeslot.starthour }} , endhour: {{ timeslot.endhour }}, day: {{ timeslot.day }}</li>
         {% endfor %}
 
     {% else %}
