@@ -19,7 +19,7 @@ def record(request):
         return generate_and_download_pdf(request)
 
     if (request.user.is_authenticated()):
-        completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True)
+        completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
 
     return render(
         request,
@@ -28,7 +28,8 @@ def record(request):
         {
             'title':'Academic Record',
             'completed_courses': completed_courses,
-            'year':datetime.now().year,
+            'year': datetime.now().year,
+            'date': datetime.now()
         })
     )
 
@@ -40,8 +41,8 @@ def generate_and_download_pdf(request):
     buffer = BytesIO()
 
     student = Students.objects.get(email=request.user)
-    completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True)
-    currently_registered_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = False)
+    completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
+    currently_registered_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = False, type = 'lec')
 
     # Create the PDF object, using the BytesIO object as its "file."
     p = canvas.Canvas(buffer)
@@ -77,13 +78,20 @@ def generate_and_download_pdf(request):
     #p.line(30, first_line - 3 * jump_line - 3 , 300,first_line - 3 * jump_line -3)
 
     for finished_class in completed_courses:
-        if finished_class.type == 'lec':
-            p.drawString(120, first_line - line_jumps * jump_line, finished_class.cid + '  -  ' + finished_class.semester + ', ' + str(finished_class.year) + ' -   Grade:  ' + finished_class.grade)
-            line_jumps += 1
-            if line_jumps == 30:                
-                p.showPage()
-                line_jumps = 1
-                first_line = 750
+            
+        p.drawString(120, first_line - line_jumps * jump_line, finished_class.cid + '  -  ' + finished_class.semester + ', ' + str(finished_class.year) + ' -   Grade:  ' + finished_class.grade)
+            
+        line_jumps += 1   
+                 
+        if line_jumps == 30:             
+            p.showPage()                
+            line_jumps = 2                
+            first_line = 750                
+            #add header again                
+            p.drawString(30,750,'CONCORDIA UNIVERSITY')                
+            p.drawString(30,735,'UNOFFICIAL TRANSCRIPT')                
+            p.drawString(420,735,'Valid as of: ' + datetime.now().strftime("%Y-%m-%d"))                
+            p.line(30,732,580,732)
     
     p.line(30, first_line - line_jumps * jump_line - 3, 300, first_line - line_jumps * jump_line - 3)
     

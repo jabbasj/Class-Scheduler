@@ -8,15 +8,35 @@
 {% if user.is_authenticated %}    
 
 <h2>{{ title }}</h2><form method="post">{% csrf_token %}<button type="submit" class="btn btn-success btn-xs">Download PDF</button></form>
+    <div style="text-align:right">
+                    {{ date }}
+                </div>
 
     {% if completed_courses %}
-    <p>Courses finished:</p>
-    <form method="post">
-    </form>
-            {% for course in completed_courses %}
-                <li>{{ course.cid }} </li>
-            {% endfor %}           
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Course ID</th>
+                        <th>Semester</th>
+                        <th>Year</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for course in completed_courses %}
+                    <tr>
+                        <td>{{ course.cid }}</td>
+                        <td>{{ course.semester }}</td>  
+                        <td>{{ course.year }}</td>
+                        <td>{{ course.grade }}</td>   
+                    </tr>
+                    {% endfor %}   
+                </tbody>
+            </table>    
     {% else %}
+        <p class="lead">No courses completed.</p>
     {% endif %}
 
 {% else %}
