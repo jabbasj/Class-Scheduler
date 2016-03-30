@@ -44,69 +44,84 @@ def generate_and_download_pdf(request):
     response['Content-Disposition'] = 'attachment; filename="unofficial_transcript.pdf"'
     buffer = BytesIO()
 
-    student = Students.objects.get(email=request.user)
-    completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
-    currently_registered_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = False, type = 'lec')
+    try:
+        student = Students.objects.get(email=request.user)
+        completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
 
-    # Create the PDF object, using the BytesIO object as its "file."
-    p = canvas.Canvas(buffer)
+        if completed_courses:
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    p.setLineWidth(.3)
-    p.setFont('Helvetica', 12)
+            # Create the PDF object, using the BytesIO object as its "file."
+            p = canvas.Canvas(buffer)
+
+            # Draw things on the PDF. Here's where the PDF generation happens.
+            # See the ReportLab documentation for the full list of functionality.
+            p.setLineWidth(.3)
+            p.setFont('Helvetica', 12)
  
-    p.drawString(30,750,'CONCORDIA UNIVERSITY')
-    p.drawString(30,735,'UNOFFICIAL TRANSCRIPT')
-    p.drawString(420,735,'Valid as of: ' + datetime.now().strftime("%Y-%m-%d"))
-    p.line(30,732,580,732)
-
-    first_line = 650
-    jump_line = 20
-
-    p.drawString(30,first_line,'Student Name:')
-    p.drawString(120,first_line,student.lastname + ', ' + student.firstname)
-    p.line(30,first_line - 3,300,first_line - 3)
-
-    p.drawString(30, first_line - jump_line, 'Student ID:')
-    p.drawString(120, first_line - jump_line, str(student.sid))
-    p.line(30,first_line - jump_line - 3, 300, first_line - jump_line - 3)
-
-    p.drawString(30, first_line - 2 * jump_line, 'E-mail:')
-    p.drawString(120, first_line - 2 * jump_line, student.email)
-    p.line(30,first_line - 2 * jump_line - 3, 300, first_line - 2 * jump_line - 3)
-
-    line_jumps = 4
-
-    p.drawString(30, first_line - 3 * jump_line, 'Finished Courses:')
-    #p.line(30, first_line - 3 * jump_line - 3 , 300,first_line - 3 * jump_line -3)
-
-    for finished_class in completed_courses:
-            
-        p.drawString(120, first_line - line_jumps * jump_line, finished_class.cid + '  -  ' + finished_class.semester + ', ' + str(finished_class.year) + ' -   Grade:  ' + finished_class.grade)
-            
-        line_jumps += 1   
-                 
-        if line_jumps == 30:             
-            p.showPage()                
-            line_jumps = 2                
-            first_line = 750                
-            #add header again                
-            p.drawString(30,750,'CONCORDIA UNIVERSITY')                
-            p.drawString(30,735,'UNOFFICIAL TRANSCRIPT')                
-            p.drawString(420,735,'Valid as of: ' + datetime.now().strftime("%Y-%m-%d"))                
+            p.drawString(30,750,'CONCORDIA UNIVERSITY')
+            p.drawString(30,735,'UNOFFICIAL TRANSCRIPT')
+            p.drawString(420,735,'Valid as of: ' + datetime.now().strftime("%Y-%m-%d"))
             p.line(30,732,580,732)
-    
-    p.line(30, first_line - line_jumps * jump_line - 3, 300, first_line - line_jumps * jump_line - 3)
-    
-    # do we need to add "registered (unfinished)" courses?
 
-    # Close the PDF object cleanly.
-    p.showPage()
-    p.save()
+            first_line = 650
+            jump_line = 20
 
-    # Get the value of the BytesIO buffer and write it to the response.
-    pdf = buffer.getvalue()
-    buffer.close()
-    response.write(pdf)
-    return response
+            p.drawString(30,first_line,'Student Name:')
+            p.drawString(120,first_line,student.lastname + ', ' + student.firstname)
+            p.line(30,first_line - 3,300,first_line - 3)
+
+            p.drawString(30, first_line - jump_line, 'Student ID:')
+            p.drawString(120, first_line - jump_line, str(student.sid))
+            p.line(30,first_line - jump_line - 3, 300, first_line - jump_line - 3)
+
+            p.drawString(30, first_line - 2 * jump_line, 'E-mail:')
+            p.drawString(120, first_line - 2 * jump_line, student.email)
+            p.line(30,first_line - 2 * jump_line - 3, 300, first_line - 2 * jump_line - 3)
+
+            line_jumps = 4
+
+            p.drawString(30, first_line - 3 * jump_line, 'Finished Courses:')
+            #p.line(30, first_line - 3 * jump_line - 3 , 300,first_line - 3 * jump_line -3)
+
+            for finished_class in completed_courses:
+            
+                p.drawString(120, first_line - line_jumps * jump_line, finished_class.cid + '  -  ' + finished_class.semester + ', ' + str(finished_class.year) + ' -   Grade:  ' + finished_class.grade)
+            
+                line_jumps += 1   
+                 
+                if line_jumps == 30:             
+                    p.showPage()                
+                    line_jumps = 2                
+                    first_line = 750                
+                    #add header again                
+                    p.drawString(30,750,'CONCORDIA UNIVERSITY')                
+                    p.drawString(30,735,'UNOFFICIAL TRANSCRIPT')                
+                    p.drawString(420,735,'Valid as of: ' + datetime.now().strftime("%Y-%m-%d"))                
+                    p.line(30,732,580,732)
+    
+            p.line(30, first_line - line_jumps * jump_line - 3, 300, first_line - line_jumps * jump_line - 3)
+    
+            # Close the PDF object cleanly.
+            p.showPage()
+            p.save()
+
+
+            # Get the value of the BytesIO buffer and write it to the response.
+            pdf = buffer.getvalue()
+            buffer.close()
+            response.write(pdf)
+            return response
+
+    except Exception as e:
+        i = 1 #do nothing
+
+    return render(
+        request,
+        'record/records.html',
+        context_instance = RequestContext(request,
+        {
+            'title':'Academic Record',
+            'year': datetime.now().year,
+            'date': datetime.now()
+        })
+    )
