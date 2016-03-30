@@ -20,11 +20,12 @@ class Courses(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-       return self.cid.cid + ' - ' + self.semester + ', ' + str(self.year) + ' - ' + self.type
+       return self.cid.cid + ' - ' + self.semester + ', ' + str(self.year) + ' - ' + self.type + ' - ' + self.sid + ' - days: ' +str(self.timeslot1.day) + ' ' + str(self.timeslot2.day)
 
     class Meta:
         managed = False
         db_table = 'courses'
+        verbose_name_plural = "Courses/Sections"
         unique_together = (('cid', 'sid', 'semester', 'year', 'type'),)
 
 
@@ -42,6 +43,7 @@ class Prerequisites(models.Model):
     class Meta:
         managed = False
         db_table = 'prerequisites'
+        verbose_name_plural = "Prerequisites"
 
 
 class Registered(models.Model):
@@ -62,6 +64,7 @@ class Registered(models.Model):
     class Meta:
         managed = False
         db_table = 'registered'
+        verbose_name_plural = "Registred Entries"
 
 
 class Students(models.Model):
@@ -79,6 +82,7 @@ class Students(models.Model):
     class Meta:
         managed = False
         db_table = 'students'
+        verbose_name_plural = "Students"
 
 
 class Timeslots(models.Model):
@@ -95,6 +99,7 @@ class Timeslots(models.Model):
     class Meta:
         managed = False
         db_table = 'timeslots'
+        verbose_name_plural = "Timeslots"
 
 
 class Sequence(models.Model):
@@ -110,6 +115,7 @@ class Sequence(models.Model):
     class Meta:
         managed = False
         db_table = 'sequence'
+        verbose_name_plural = "Sequence Entries"
 
 class AuthUser(models.Model):
     password = models.CharField(max_length=128)
