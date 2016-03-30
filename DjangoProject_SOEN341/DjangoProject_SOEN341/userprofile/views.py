@@ -12,7 +12,10 @@ def profile(request):
     assert isinstance(request, HttpRequest)
     student = None
     if (request.user.is_authenticated()):
-        student = Students.objects.get(email=request.user)
+        try:
+            student = Students.objects.get(email=request.user)
+        except Exception as e:
+            student = None
 
     if request.method == 'POST':
         return post_handler(request)

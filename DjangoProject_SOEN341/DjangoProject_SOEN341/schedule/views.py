@@ -29,7 +29,7 @@ def post_handler(request):
     
     chosen_semester = None
     chosen_year = None
-    student = Students.objects.get(email=request.user)
+    student = None
     # how will we distinguish between courses registered and courses to simply view on a schedule?
     # for now, let's use grade = '##' to mean that this course is not registered, just pending confirmation
     courses_registered = None
@@ -38,8 +38,13 @@ def post_handler(request):
     if 'view' in request.POST.keys():
         chosen_semester = request.POST.get('semester')
         chosen_year = request.POST.get('year')
-        courses_registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False)
-        courses_pending_confirmation = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, grade = '##')
+        try:
+            Students.objects.get(email=request.user)
+            courses_registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False)
+            courses_pending_confirmation = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, grade = '##')
+        except Exception as e:
+            courses_registered = None
+            courses_pending_confirmation = None
 
     return render(
         request,

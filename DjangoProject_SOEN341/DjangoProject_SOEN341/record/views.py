@@ -19,7 +19,11 @@ def record(request):
         return generate_and_download_pdf(request)
 
     if (request.user.is_authenticated()):
-        completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
+        try:
+            completed_courses = Registered.objects.filter(studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
+        except Exception as e:
+            completed_courses = None
+
 
     return render(
         request,
