@@ -19,6 +19,9 @@ class Courses(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+       return self.cid.cid + ' - ' + self.semester + ', ' + str(self.year) + ' - ' + self.type
+
     class Meta:
         managed = False
         db_table = 'courses'
@@ -32,6 +35,9 @@ class Prerequisites(models.Model):
     altid = models.CharField(db_column='altId', max_length=8, blank=True, null=True)  # Field name made lowercase.
 
     objects = models.Manager()
+
+    def __str__(self):
+       return self.pid + ' requires ' + self.rid
 
     class Meta:
         managed = False
@@ -48,6 +54,11 @@ class Registered(models.Model):
     grade = models.CharField(max_length=4, blank=True, null=True)
     finished = models.IntegerField(blank=True, null=True)
 
+    objects = models.Manager()
+
+    def __str__(self):
+       return str(self.studentid) + ' in ' + self.cid + ', ' + self.sectionid + ' - ' + self.semester + ', ' + str(self.year) + ' - ' + self.grade
+
     class Meta:
         managed = False
         db_table = 'registered'
@@ -62,6 +73,9 @@ class Students(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+       return str(self.sid) + ' - ' + self.lastname + ', ' + self.firstname + ' - ' + self.email
+
     class Meta:
         managed = False
         db_table = 'students'
@@ -75,6 +89,9 @@ class Timeslots(models.Model):
 
     objects = models.Manager()
 
+    def __str__(self):
+       return 'day: ' + str(self.day) + ' start: ' + self.starthour.strftime('%I:%H %p') + ' end: ' + self.endhour.strftime('%I:%H %p')
+
     class Meta:
         managed = False
         db_table = 'timeslots'
@@ -86,6 +103,9 @@ class Sequence(models.Model):
     year = models.IntegerField()
     
     objects = models.Manager()
+
+    def __str__(self):
+       return self.cid + ' - ' + self.semester + ', ' + str(self.year)
 
     class Meta:
         managed = False
@@ -102,6 +122,9 @@ class AuthUser(models.Model):
     is_staff = models.IntegerField()
     is_active = models.IntegerField()
     date_joined = models.DateTimeField()
+
+    def __str__(self):
+       return self.username + ' - ' + self.password + ', ' + self.first_name + ' - ' + self.last_name
 
     class Meta:
         managed = False
