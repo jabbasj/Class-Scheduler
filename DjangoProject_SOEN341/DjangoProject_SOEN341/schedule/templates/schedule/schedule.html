@@ -1,9 +1,9 @@
-﻿{% extends "app/layout.html" %}
+{% extends "app/layout.html" %}
 {% block content %}
 <style>
 .navbar {
     top: -70px;
-}  
+}
 </style>
 {% if user.is_authenticated %}
 
@@ -28,11 +28,11 @@
             if (!start_hour.startsWith('0') && start[0] != undefined) {
                 start_minutes = courses[i].fields.timeslot1[1].substring(3,5);
 
-                for (j = 0; j < parseInt(start_minutes)/15; j++) {            
+                for (j = 0; j < parseInt(start_minutes)/15; j++) {
                     start = start.next();
-                }            
+                }
                 $(start).find('td')[day].style.backgroundColor = colors[i];
-                
+
                 end_hour = courses[i].fields.timeslot1[2].substring(0,2);
                 if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
 
@@ -40,9 +40,9 @@
 
                 if (end[0] != undefined) {
                 end_minutes = courses[i].fields.timeslot1[2].substring(3,5);
-                for (j = 1; j < parseInt(end_minutes)/15; j++) {            
+                for (j = 1; j < parseInt(end_minutes)/15; j++) {
                         end = end.next();
-                    }            
+                    }
                     $(end).find('td')[day].style.backgroundColor = colors[i];
                 }
                 m = 0;
@@ -51,7 +51,7 @@
                     end = end.prev();
                     $(end).find('td')[day].style.backgroundColor = colors[i];
                 } while (!end.is(start));
-                
+
                 center = start;
 
                 for (k = 1; k < m /2; k++) {
@@ -74,11 +74,11 @@
             if (!start_hour.startsWith('0') && start[0] != undefined) {
                 start_minutes = courses[i].fields.timeslot2[1].substring(3,5);
 
-                for (j = 0; j < parseInt(start_minutes)/15; j++) {            
+                for (j = 0; j < parseInt(start_minutes)/15; j++) {
                     start = start.next();
-                }            
+                }
                 $(start).find('td')[day].style.backgroundColor = colors[i];
-                
+
                 end_hour = courses[i].fields.timeslot2[2].substring(0,2);
                 if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
 
@@ -86,9 +86,9 @@
 
                 if (end[0] != undefined) {
                 end_minutes = courses[i].fields.timeslot2[2].substring(3,5);
-                for (j = 1; j < parseInt(end_minutes)/15; j++) {            
+                for (j = 1; j < parseInt(end_minutes)/15; j++) {
                         end = end.next();
-                    }            
+                    }
                     $(end).find('td')[day].style.backgroundColor = colors[i];
                 }
 
@@ -109,8 +109,8 @@
                 $(center).find('td')[day].innerHTML = courses[i].fields.sid;
                 $(center).next().find('td')[day].innerHTML = courses[i].fields.lecturer;
 
-            }         
-            
+            }
+
         }
     };
 
@@ -150,7 +150,7 @@
             <label><br/>
                 <button type="submit" class="btn btn-success btn-md" name="view">View</button>
             </form>
-        </div> 
+        </div>
         <div class="container">
             <table id="schedule_table" class="table table-bordered table-striped" style="font-family:verdana;">
                 <tr class="info">

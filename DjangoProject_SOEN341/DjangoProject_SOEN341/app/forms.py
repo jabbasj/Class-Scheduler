@@ -18,10 +18,10 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                    'placeholder':'Password'}))
 
 class ChangeEmailForm(forms.Form):
-    new_email = forms.CharField(label='New Email Address', 
-                                max_length=30, min_length=10, 
+    new_email = forms.CharField(label='New Email Address',
+                                max_length=30, min_length=10,
                                 widget=forms.TextInput({
-                                    'class': 'form-control', 
+                                    'class': 'form-control',
                                     'placeholder': 'Enter New Email'}))
 
     password_confirmation = forms.CharField(label=_("Password"),

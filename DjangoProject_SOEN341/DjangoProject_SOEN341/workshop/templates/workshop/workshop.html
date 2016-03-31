@@ -10,12 +10,67 @@
 
 <h2>{{ title }}</h2>
 
+  {% if suggested_sequence %}
+  <form action="/workshop/" role="form" method="POST" id="add">
+    {% csrf_token %}
+    <input type="text" name="addcourse" placeholder=" ex: SOEN 341" autofocus="true" value>
+    <button type="submit" class="btn btn-default btn-sm" form="add" value="add">Add</button>
+  </form>
+  <form action="" role="form" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-default btn-sm" value="generate">Generate</button>
+  </form>
+  {% if addcourses %}
+  <p>Your Courses:</p>
+  <p></p>
+  <div class="small-12 columns">
+  {% for i in addcourses %}
+    <p>{{ i.cid.cid }}</p>
+    {% for j in addsections %}
+      <input type="checkbox" name="section" value="section" checked> {{ j.sid }}
+    {% endfor %}
+  {% endfor %}
+  </div>
+  {% endif %}
+  {% endif %}
+  {% if constraints %}
+    <form action="/workshop/" role="form" method="POST" id="constraints">
+      {% csrf_token %}
+      <table>
+        <tr><td>Days of Week:</td>
+        <tr><td><input type="checkbox" name="monday" value="monday" checked> Monday</td></tr>
+        <tr><td><input type="checkbox" name="tuesday" value="tuesday" checked> Tuesday</td></tr>
+        <tr><td><input type="checkbox" name="wednesday" value="wednesday" checked> Wednesday</td></tr>
+        <tr><td><input type="checkbox" name="thursday" value="thursday" checked> Thursday</td></tr>
+        <tr><td><input type="checkbox" name="friday" value="friday" checked> Friday</td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td><input type="checkbox" name="morning" value="morning" checked> Morning Classes</td></tr>
+        <tr><td><input type="checkbox" name="afternoon" value="afternoon" checked> Afternoon Classes</td></tr>
+        <tr><td><input type="checkbox" name="evening" value="evening" checked> Evening Classes</td></tr>
+        <tr><td><input type="checkbox" name="summer" value="summer" checked> Summer Classes</td></tr>
+        <tr><td><input type="checkbox" name="split" value="split" checked> Split Lectures</td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td>Location:</td></tr>
+        <tr><td><input type="checkbox" name="sgw" value="sgw" checked> Sir George Williams (Downtown)</td></tr>
+        <tr><td><input type="checkbox" name="online" value="online"> Online</td></tr>
+        <tr><td></td></tr>
+        <tr><td><button type="submit" class="btn btn-default btn-xs" form="constraints" value="generate">Generate</button></td></tr>
+      </table>
+    </form>
+  {% endif %}
+
     {% if suggested_sequence %}
     <p>Suggested sequence:</p>
 
         {% for course in suggested_sequence %}
-            <li>{{ course.cid }} , {{ course.semester }}, {{ course.year }}</li>
+            <li>{{ course.cid.cid }} , {{ course.type }} ({{ course.sid }}): {{ course.timeslot1.day }},{{ course.timeslot2.day }}  {{ course.timeslot1.starthour }} - {{ course.timeslot1.endhour }}</li>
         {% endfor %}
+        <form action="/workshop/" role="form" method="POST" id="gensched">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-default btn-sm" value="gensched">Generate Schedule</button>
+        </form>
 
     {% else %}
     {% endif %}
