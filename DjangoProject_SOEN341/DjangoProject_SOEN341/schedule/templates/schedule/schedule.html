@@ -5,23 +5,119 @@
     top: -70px;
 }  
 </style>
-{% if user.is_authenticated %}  
+{% if user.is_authenticated %}
 
-<!--- for list viewing, to remove -->
-{% if courses_registered %}
-    Courses registered:
-    {% for course in courses_registered %}
-        <li> {{course.id}} {{course.semester}} {{course.year}} {{course.grade}}</li>
-    {% endfor %}
-{% endif %}
+<script>
+    function draw_schedule(input_courses) {
+        schedule_table = document.getElementById("schedule_table");
+        courses = {{ json_courses_registered | safe }}
+        colors = ["#9dd6d6", "orange", "#ff69b4", "#969696","#c3cb71", "#c7bbc9", "#83adb5", "#eb6841", "#559e83", "#edc951", "#e30074", "#ab8f8f", "#296967", "#ba3737", "#86d2dd", "#92c256"]
 
-{% if courses_pending_confirmation %}
-    Courses pending confirmation:
-    {% for course in courses_pending_confirmation %}
-        <li> {{course.id}} {{course.semester}} {{course.year}} {{course.grade}}</li>
-    {% endfor %}
-{% endif %}
-<!--- for list viewing -->
+        //to remove
+        console.log(courses);
+
+        for (i in courses) {
+
+            //timeslot1
+            start_hour = courses[i].fields.timeslot1[1].substring(0,2);
+            if (start_hour.startsWith('0')) {start_hour = start_hour[1];};
+
+            day = courses[i].fields.timeslot1[0];
+
+            start = $(schedule_table).find("tr:contains('" + start_hour + ":00" +"')");
+            if (!start_hour.startsWith('0') && start[0] != undefined) {
+                start_minutes = courses[i].fields.timeslot1[1].substring(3,5);
+
+                for (j = 0; j < parseInt(start_minutes)/15; j++) {            
+                    start = start.next();
+                }            
+                $(start).find('td')[day].style.backgroundColor = colors[i];
+                
+                end_hour = courses[i].fields.timeslot1[2].substring(0,2);
+                if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
+
+                end = $(schedule_table).find("tr:contains('" + end_hour + ":00" +"')");
+
+                if (end[0] != undefined) {
+                end_minutes = courses[i].fields.timeslot1[2].substring(3,5);
+                for (j = 1; j < parseInt(end_minutes)/15; j++) {            
+                        end = end.next();
+                    }            
+                    $(end).find('td')[day].style.backgroundColor = colors[i];
+                }
+                m = 0;
+                do {
+                    m++;
+                    end = end.prev();
+                    $(end).find('td')[day].style.backgroundColor = colors[i];
+                } while (!end.is(start));
+                
+                center = start;
+
+                for (k = 1; k < m /2; k++) {
+                center = center.next();
+                }
+
+                $(center).prev().find('td')[day].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
+                $(center).find('td')[day].innerHTML = courses[i].fields.sid;
+                $(center).next().find('td')[day].innerHTML = courses[i].fields.lecturer;
+
+            }
+
+           //same code as above for timeslot2
+            start_hour = courses[i].fields.timeslot2[1].substring(0,2);
+            if (start_hour.startsWith('0')) {start_hour = start_hour[1];};
+
+            day = courses[i].fields.timeslot2[0];
+            start = $(schedule_table).find("tr:contains('" + start_hour + ":00" +"')");
+
+            if (!start_hour.startsWith('0') && start[0] != undefined) {
+                start_minutes = courses[i].fields.timeslot2[1].substring(3,5);
+
+                for (j = 0; j < parseInt(start_minutes)/15; j++) {            
+                    start = start.next();
+                }            
+                $(start).find('td')[day].style.backgroundColor = colors[i];
+                
+                end_hour = courses[i].fields.timeslot2[2].substring(0,2);
+                if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
+
+                end = $(schedule_table).find("tr:contains('" + end_hour + ":00" +"')");
+
+                if (end[0] != undefined) {
+                end_minutes = courses[i].fields.timeslot2[2].substring(3,5);
+                for (j = 1; j < parseInt(end_minutes)/15; j++) {            
+                        end = end.next();
+                    }            
+                    $(end).find('td')[day].style.backgroundColor = colors[i];
+                }
+
+                m = 0;
+                do {
+                    m++;
+                    end = end.prev();
+                    $(end).find('td')[day].style.backgroundColor = colors[i];
+                } while (!end.is(start));
+
+                center = start;
+
+                for (k = 1; k < m / 2 ; k++) {
+                center = center.next();
+                }
+
+                $(center).prev().find('td')[day].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
+                $(center).find('td')[day].innerHTML = courses[i].fields.sid;
+                $(center).next().find('td')[day].innerHTML = courses[i].fields.lecturer;
+
+            }         
+            
+        }
+    };
+
+    window.onload = function () {
+        draw_schedule();
+    };
+</script>
 
 {% if chosen_semester and chosen_year %}
     <h2> {{ chosen_semester }}, {{ chosen_year }}</h2>
@@ -56,7 +152,7 @@
             </form>
         </div> 
         <div class="container">
-            <table class="table table-bordered table-striped">
+            <table id="schedule_table" class="table table-bordered table-striped" style="font-family:verdana;">
                 <tr class="info">
                     <th>Time</th>
                     <th>Monday</th>

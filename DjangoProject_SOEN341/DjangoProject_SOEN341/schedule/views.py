@@ -5,6 +5,8 @@ from datetime import datetime
 
 from app.models import Students, Sequence, Registered, Courses, Prerequisites, Timeslots
 
+from django.core import serializers
+
 def schedule(request):
     """Renders the schedule page."""
     assert isinstance(request, HttpRequest)
@@ -32,16 +34,18 @@ def post_handler(request):
     student = None
     # how will we distinguish between courses registered and courses to simply view on a schedule?
     # for now, let's use grade = '##' to mean that this course is not registered, just pending confirmation
-    courses_registered = None
-    courses_pending_confirmation = None
+    courses_registered = []
 
     if 'view' in request.POST.keys():
         chosen_semester = request.POST.get('semester')
         chosen_year = request.POST.get('year')
         try:
-            Students.objects.get(email=request.user)
-            courses_registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False)
-            courses_pending_confirmation = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, grade = '##')
+            student = Students.objects.get(email=request.user)
+            registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False)
+
+            for reg in registered:
+                courses_registered.append(Courses.objects.get(cid=reg.cid, sid=reg.sectionid, semester=chosen_semester, year=chosen_year, type=reg.type))
+
         except Exception as e:
             courses_registered = None
             courses_pending_confirmation = None
@@ -55,7 +59,7 @@ def post_handler(request):
             'chosen_semester': chosen_semester,
             'chosen_year': chosen_year,
             'courses_registered': courses_registered,
-            'courses_pending_confirmation': courses_pending_confirmation,
+            'json_courses_registered': serializers.serialize('json',courses_registered, use_natural_foreign_keys = True),
             'message':'Your schedule page.',
             'year':datetime.now().year,
         })

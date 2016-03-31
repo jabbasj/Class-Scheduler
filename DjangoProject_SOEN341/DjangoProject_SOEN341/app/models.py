@@ -101,6 +101,9 @@ class Timeslots(models.Model):
         db_table = 'timeslots'
         verbose_name_plural = "Timeslots"
 
+    def natural_key(self):
+        return (self.day, self.starthour, self.endhour)
+
 
 class Sequence(models.Model):
     cid = models.CharField(db_column='cId', primary_key=True, max_length=8)  # Field name made lowercase.
