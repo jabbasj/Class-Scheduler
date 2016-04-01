@@ -18,30 +18,27 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `prerequisites`
+-- Table structure for table `auth_group`
 --
 
-DROP TABLE IF EXISTS `prerequisites`;
+DROP TABLE IF EXISTS `auth_group`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `prerequisites` (
-  `pId` varchar(8) DEFAULT NULL,
-  `rId` varchar(8) NOT NULL,
-  `parallel` tinyint(1) DEFAULT '0',
-  `altId` varchar(8) DEFAULT NULL,
+CREATE TABLE `auth_group` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  `name` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `prerequisites`
+-- Dumping data for table `auth_group`
 --
 
-LOCK TABLES `prerequisites` WRITE;
-/*!40000 ALTER TABLE `prerequisites` DISABLE KEYS */;
-INSERT INTO `prerequisites` VALUES ('COMP 249','COMP 248',0,'',1),('SOEN 287','COMP 248',0,'',2),('COMP 348','COMP 249',0,'',3),('COMP 352','COMP 232',1,'',4),('ENCS 282','ENCS 272',0,'EWT',5),('ELEC 321','ENGR 213',0,'',6),('ENGR 242','ENGR 213',1,'',7),('ENGR 243','ENGR 213',0,'',8),('ENGR 243','ENGR 242',0,'',9),('ENGR 361','ENGR 213',0,'',10),('ENGR 361','ENGR 233',0,'',11),('ENGR 361','ENGR 251',0,'',12);
-/*!40000 ALTER TABLE `prerequisites` ENABLE KEYS */;
+LOCK TABLES `auth_group` WRITE;
+/*!40000 ALTER TABLE `auth_group` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_group` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-30 18:14:06
+-- Dump completed on 2016-04-01 11:26:28

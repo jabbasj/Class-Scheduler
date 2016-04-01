@@ -18,37 +18,30 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `registered`
+-- Table structure for table `prerequisites`
 --
 
-DROP TABLE IF EXISTS `registered`;
+DROP TABLE IF EXISTS `prerequisites`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `registered` (
-  `studentId` int(11) NOT NULL,
-  `cId` varchar(8) NOT NULL,
-  `sectionId` varchar(8) NOT NULL,
-  `semester` varchar(6) NOT NULL,
-  `year` int(11) NOT NULL,
-  `type` varchar(3) NOT NULL,
-  `grade` varchar(4) DEFAULT NULL,
-  `finished` tinyint(1) DEFAULT '0',
+CREATE TABLE `prerequisites` (
+  `pId` varchar(8) DEFAULT NULL,
+  `rId` varchar(8) NOT NULL,
+  `parallel` tinyint(1) DEFAULT '0',
+  `altId` varchar(8) DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`),
-  KEY `studentId` (`studentId`),
-  KEY `cId` (`cId`,`sectionId`,`semester`,`year`,`type`),
-  CONSTRAINT `registered_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `students` (`sId`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `registered`
+-- Dumping data for table `prerequisites`
 --
 
-LOCK TABLES `registered` WRITE;
-/*!40000 ALTER TABLE `registered` DISABLE KEYS */;
-INSERT INTO `registered` VALUES (10001011,'COMP 232','NN','winter',2016,'lec','43',1,1),(10001011,'COMP 232','NN','winter',2016,'lec','43',0,2),(10002032,'COMP 332','NN','winter',2016,'lec','43',0,3);
-/*!40000 ALTER TABLE `registered` ENABLE KEYS */;
+LOCK TABLES `prerequisites` WRITE;
+/*!40000 ALTER TABLE `prerequisites` DISABLE KEYS */;
+INSERT INTO `prerequisites` VALUES ('COMP 249','COMP 248',0,'',1),('SOEN 287','COMP 248',0,'',2),('COMP 348','COMP 249',0,'',3),('COMP 352','COMP 232',1,'',4),('ENCS 282','ENCS 272',0,'EWT',5),('ELEC 321','ENGR 213',0,'',6),('ENGR 242','ENGR 213',1,'',7),('ENGR 243','ENGR 213',0,'',8),('ENGR 243','ENGR 242',0,'',9),('ENGR 361','ENGR 213',0,'',10),('ENGR 361','ENGR 233',0,'',11),('ENGR 361','ENGR 251',0,'',12);
+/*!40000 ALTER TABLE `prerequisites` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -60,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-30 18:14:06
+-- Dump completed on 2016-04-01 11:26:29

@@ -18,29 +18,37 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `django_content_type`
+-- Table structure for table `registered`
 --
 
-DROP TABLE IF EXISTS `django_content_type`;
+DROP TABLE IF EXISTS `registered`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `django_content_type` (
+CREATE TABLE `registered` (
+  `studentId` int(11) NOT NULL,
+  `cId` varchar(8) NOT NULL,
+  `sectionId` varchar(8) NOT NULL,
+  `semester` varchar(6) NOT NULL,
+  `year` int(11) NOT NULL,
+  `type` varchar(3) NOT NULL,
+  `grade` varchar(4) DEFAULT NULL,
+  `finished` tinyint(1) NOT NULL DEFAULT '0',
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `app_label` varchar(100) NOT NULL,
-  `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `django_content_type_app_label_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+  KEY `studentId` (`studentId`),
+  KEY `cId` (`cId`,`sectionId`,`semester`,`year`,`type`),
+  CONSTRAINT `registered_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `students` (`sId`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `django_content_type`
+-- Dumping data for table `registered`
 --
 
-LOCK TABLES `django_content_type` WRITE;
-/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (7,'admin','logentry'),(10,'app','courses'),(11,'app','prerequisites'),(12,'app','registered'),(14,'app','sequence'),(13,'app','students'),(9,'app','timeslots'),(2,'auth','group'),(1,'auth','permission'),(3,'auth','user'),(4,'contenttypes','contenttype'),(5,'sessions','session'),(6,'sites','site');
-/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
+LOCK TABLES `registered` WRITE;
+/*!40000 ALTER TABLE `registered` DISABLE KEYS */;
+INSERT INTO `registered` VALUES (10001011,'COMP 232','NN','winter',2016,'lec','43',1,1),(10001011,'COMP 232','NN','winter',2016,'lec','43',0,2),(10002032,'COMP 332','NN','winter',2016,'lec','43',0,3),(10001011,'COMP 249','QQ','winter',2016,'lec','##',0,4),(10001011,'COMP 232','NN','winter',2016,'lec','43',1,5),(10001011,'COMP 352','X','winter',2016,'lec','##',0,6),(10001011,'ENGR 243','X','winter',2016,'lec','',0,7);
+/*!40000 ALTER TABLE `registered` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-30 18:14:06
+-- Dump completed on 2016-04-01 11:26:28

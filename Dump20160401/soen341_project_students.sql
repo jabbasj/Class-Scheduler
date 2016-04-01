@@ -40,7 +40,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (10001011,'Vince','Lasalle','vLasalle@gmail.com','recess'),(10001110,'Gus','Griswald','gGriswald@gmail.com','qwerty'),(10001222,'Mikey','Blumberg','mBlumberg@gmail.com','password1234'),(10001235,'T.J','Detweiler','TJDetweiller@gmail.com','asdfasdf'),(10001343,'Gretchen','Grundler','gGrundler@gmail.com','safetyfirst'),(10002032,'Ashley','Spinelli','flashGordon4Life@gmail.com','flashGordon');
+INSERT INTO `students` VALUES (54353,'new','user','new_user','1234'),(10001011,'Vince','Lasalle','vLasalle@gmail.com','recess'),(10001110,'Gus','Griswald','gGriswald@gmail.com','qwerty'),(10001222,'Mikey','Blumberg','mBlumberg@gmail.com','password1234'),(10001235,'T.J','Detweiler','TJDetweiller@gmail.com','asdfasdf'),(10001343,'Gretchen','Grundler','gGrundler@gmail.com','safetyfirst'),(10002032,'Ashley','Spinelli','flashGordon4Life@gmail.com','flashGordon');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-30 18:14:05
+-- Dump completed on 2016-04-01 11:26:28
