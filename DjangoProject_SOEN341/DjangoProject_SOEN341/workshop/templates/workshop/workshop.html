@@ -96,7 +96,10 @@
     {% endif %}
 
 {% else %}
-    <p class="lead">Please log into your account to build your schedule</p>
+    <div class="alert alert-danger">
+         <a href="login" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+         <strong>Error!</strong> Please log into your account to build your schedule!
+    </div>
 {% endif %}
 
 {% endblock %}

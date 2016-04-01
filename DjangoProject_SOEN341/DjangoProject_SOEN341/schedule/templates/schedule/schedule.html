@@ -8,9 +8,15 @@
 {% if user.is_authenticated %}
 
 <script>
+    function add_course_overlay() {
+        el = document.getElementById("add_course_overlay");
+        el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+    }
+
     function draw_schedule(input_courses) {
         schedule_table = document.getElementById("schedule_table");
-        courses = {{ json_courses_registered | safe }}
+        courses = {{ json_courses_registered|safe }}
         colors = ["#9dd6d6", "orange", "#ff69b4", "#969696","#c3cb71", "#c7bbc9", "#83adb5", "#eb6841", "#559e83", "#edc951", "#e30074", "#ab8f8f", "#296967", "#ba3737", "#86d2dd", "#92c256"];
         for (i in courses) {
             timeslots = [];
@@ -64,8 +70,63 @@
             }            
         }
     };
+
+    function update_radios(value) {
+
+        tut_radios = $('input[type=radio][name="tut"]');
+        for (i = 0 ; i < tut_radios.length; i++) {
+            tut_radios[i].disabled = true;
+        }
+
+        lab_radios = $('input[type=radio][name="lab"]');
+        for (i = 0 ; i < lab_radios.length; i++) {
+            lab_radios[i].disabled = true;
+        }
+
+        first_char_from_section = value.substring(0,1);
+
+        tut_radios = $('input[type=radio][name="tut"][value^="' + first_char_from_section + '"]');
+
+        for (i = 0; i < tut_radios.length; i++ ){
+            tut_radios[i].disabled = false;
+        }    
+
+        lab_radios = $('input[type=radio][name="lab"][value^="' + first_char_from_section + '"]');
+        for (i = 0; i < lab_radios.length; i++ ){
+            lab_radios[i].disabled = false;
+        } 
+    };
+
+    function convert_day(num) {
+        if (num == 1) {
+            return "MON";
+        }
+        if (num == 2) {
+            return "TUES";
+        }
+        if (num == 3) {
+            return "WED";
+        }
+        if (num == 4) {
+            return "THURS";
+        }
+        if (num == 5) {
+            return "FRI";
+        }
+       return undefined;
+    }
+
+
     window.onload = function () {
         draw_schedule();
+        lectures = {{ json_lectures|safe }}
+        tutorials = {{ json_tutorials|safe }}
+        labs = {{ json_lectures|safe }}
+        if ( lectures.length > 0 || tutorials.length > 0 || labs.length > 0 ) {
+            add_course_overlay();
+        }
+
+        $('input[type=radio][name="lec"]').click(function(){update_radios(this.value)});
     };
 </script>
 
@@ -689,19 +750,113 @@
                 </tr>
             </table>
         </div>
+<br />
+<hr />
+<div id="search_and_add">
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-md" name="search">Search</button>
+        </form>
+        <br /><br />
+
+        {% if potential_courses %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="panel-group" id="accordion">
+                {% for potential_course in potential_courses %}
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#{{potential_course.id}}">{{potential_course.cid}}</a>
+                        <span class="pull-right"><button type="submit" class="btn btn-success btn-xs" style="text-align:right" name="check_sections" value="{{potential_course.cid}}">Add</button></span>
+                      </h4>
+                    </div>
+                    <div id="{{potential_course.id}}" class="panel-collapse collapse">
+                      <div class="panel-body">{{ potential_course.description }}</div>
+                    </div>
+                  </div>
+                {% endfor %}    
+            </div>
+        </form>
+        {% else %}
+            <div class="alert alert-info">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Info!</strong> Choose a semester then click 'search' to browse and manually add courses available to you!
+            </div>
+        {% endif %}
+        {% if potential_courses_success == False %}
+            <div class="alert alert-danger">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Error!</strong> No classes available to you!
+            </div>
+        {% endif %}
+</div>
+
+<div id="add_course_overlay">
+     <div class="parent">
+         <h4>Add course manually{% if lectures %} ({{lectures.0.cid.cid}}) {% endif %}</h4><hr />
+         <form method="post">
+          {% csrf_token %}
+             
+             <div class="container">
+
+            {% if lectures %}            
+                <table class="table" style="float: left; width:30%">
+                    <thead>
+                        <tr><th>Lectures</th></tr>
+                    </thead>
+
+                    <tbody>
+                        {% for lec in lectures %}
+                        <tr><td><span class="pull-left"><input type="radio" name="{{lec.type}}" value="{{lec.sid}}"></span><strong>{{ lec.sid }}</strong><br />{% if lec.timeslot1.day %}<script>document.write(convert_day({{lec.timeslot1.day}}))</script> {{lec.timeslot1.starthour}} - {{lec.timeslot1.endhour}}{% endif %} {% if lec.timeslot2.day %}<br /><script>document.write(convert_day({{ lec.timeslot2.day}}))</script> {{lec.timeslot2.starthour}} - {{lec.timeslot2.endhour}}{% endif %}</td></tr>
+                        {% endfor %}   
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if tutorials %}            
+                <table class="table" style="float: left; width:30%">
+                    <thead>
+                        <tr><th>Tutorials</th></tr>
+                    </thead>
+
+                    <tbody>
+                        {% for tut in tutorials %}
+                        <tr><td><span class="pull-left"><input type="radio" name="{{tut.type}}" value="{{tut.sid}}" disabled></span><strong>{{ tut.sid }}</strong><br />{% if tut.timeslot1.day %}<script>document.write(convert_day({{tut.timeslot1.day}}))</script> {{tut.timeslot1.starthour}} - {{tut.timeslot1.endhour}}{% endif %} {% if tut.timeslot2.day %}<br /><script>document.write(convert_day({{tut.timeslot2.day}}))</script> {{tut.timeslot2.starthour}} - {{tut.timeslot2.endhour}}{% endif %}</td></tr>
+                        {% endfor %}   
+                    </tbody>
+                </table>    
+            {% endif %}
+
+            {% if labs %}            
+                <table class="table" style="float: left; width:30%">
+                    <thead>
+                        <tr><th>Labs</th></tr>
+                    </thead>
+
+                    <tbody>
+                        {% for lab in labs %}
+                        <tr><td><span class="pull-left"><input type="radio" name="{{lab.type}}" value="{{lab.sid}}" disabled></span><strong>{{ lab.sid }}</strong><br />{% if lab.timeslot1.day %}<script>document.write(convert_day({{lab.timeslot1.day}}))</script> {{lab.timeslot1.starthour}} - {{lab.timeslot1.endhour}}{% endif %} {% if lab.timeslot2.day %}<script>document.write(convert_day({{lab.timeslot2.day}}))</script> {{lab.timeslot2.starthour}} - {{lab.timeslot2.endhour}}{% endif %}</td></tr>
+                        {% endfor %}   
+                    </tbody>
+                </table>    
+            {% else %}
+            {% endif %}
+
+            </div>
+                  
+         <button type="button" class="btn btn-danger btn-xs" onclick="add_course_overlay()">Cancel</button>
+         <button type="submit" class="btn btn-success btn-xs" value="register_course" onclick="add_course_overlay()">Submit</button>             
+         </form>  
+     </div>
+</div>
 
 {% else %}
-    <p class="lead">Please log into your account to view your schedule</p>
-{% endif %}
-
-{% if timeslots %}
-    <p>Test all timeslots:</p>
-
-        {% for timeslot in timeslots %}
-            <li>id: {{ timeslot.id }}, starthour: {{ timeslot.starthour }} , endhour: {{ timeslot.endhour }}, day: {{ timeslot.day }}</li>
-        {% endfor %}
-
-    {% else %}
+    <div class="alert alert-danger">
+         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+         <strong>Error!</strong> Please log into your account to view your schedule!
+    </div>
 {% endif %}
 
 {% endblock %}

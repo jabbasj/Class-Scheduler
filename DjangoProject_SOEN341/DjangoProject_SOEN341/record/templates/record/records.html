@@ -39,7 +39,10 @@
     {% endif %}
 
 {% else %}
-    <p class="lead">Please log into your account to view your schedule</p>
+    <div class="alert alert-danger">
+         <a href="login" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+         <strong>Error!</strong> Please log into your account to view your academic record!
+    </div>
 {% endif %}
 
 {% endblock %}

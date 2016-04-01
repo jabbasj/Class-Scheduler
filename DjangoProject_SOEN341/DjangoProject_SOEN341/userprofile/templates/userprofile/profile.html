@@ -68,7 +68,10 @@
         </div>
           
     {% else %}
-                <strong>There are no students present.</strong>
+                <div class="alert alert-danger">
+                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                     <strong>Error!</strong> You do not have a student profile!
+                </div>
     {% endif %}
 
 </div>
@@ -107,7 +110,10 @@
 
 
 {% else %}
-    <p class="lead">Please log into your account to view your schedule</p>
+    <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error!</strong> Please login to view your profile!
+    </div>
 {% endif %}
 
 
