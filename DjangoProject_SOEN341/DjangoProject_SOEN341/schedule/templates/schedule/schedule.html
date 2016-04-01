@@ -29,7 +29,7 @@
                 if (start_hour.startsWith('0')) {start_hour = start_hour[1];}
                 if (start_hour.startsWith('no')) {start_hour = '12';}
 
-                start = $(schedule_table).find("tr:contains('" + start_hour + ":00" +"')");
+                start = $(schedule_table).find("tr th:contains('" + start_hour + ":00" +"')").parent();
    
                 start_minutes = timeslots[t][1].substring(3,5);
                 if (start_minutes.startsWith('n')) {start_minutes = '00';}
@@ -44,7 +44,7 @@
                     if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
                     if (end_hour.startsWith('no')) {end_hour = '12';}
 
-                    end = $(schedule_table).find("tr:contains('" + end_hour + ":00" +"')");
+                    end = $(schedule_table).find("tr th:contains('" + end_hour + ":00" +"')").parent();
 
                     if (end[0] != undefined) {
                     end = end.prev();
@@ -70,7 +70,6 @@
                     }
 
                     $(center).prev().find('td')[day].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
-                    $(center).prev().find('td')[day].style.borderTop = "none !important";
                     $(center).find('td')[day].innerHTML =  courses[i].fields.lecturer + ' (' +courses[i].fields.room + ', ' + courses[i].fields.sid + ')';
                     $(center).next().find('td')[day].innerHTML = start_hour + ':' + start_minutes + ' - ' + end_hour + ':' + end_minutes;
 
