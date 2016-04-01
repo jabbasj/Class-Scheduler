@@ -15,8 +15,8 @@ def schedule(request):
         return post_handler(request)
 
     else:
-        if request.session['semester'] != None and request.session['year'] != None:
-            return post_handler(request)
+        if 'semester' in request.session and 'year' in request.session:
+           return post_handler(request)
 
     return render(
         request,

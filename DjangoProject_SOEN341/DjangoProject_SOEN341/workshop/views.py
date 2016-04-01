@@ -1,4 +1,4 @@
-from django.shortcuts import render
+﻿from django.shortcuts import render
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
@@ -32,7 +32,7 @@ def workshop(request):
         year = None
     if request.POST.get('add'):
         added = request.POST.get('add')
-        print 'hey'
+        #print 'hey'
         added_courses.append(added)
     if request.POST.get('gensched'):
         return solve(request, 0, suggested_sequence, classes)
@@ -73,7 +73,7 @@ def addcourse(request):
     added = None
     if 'view' in request.POST.keys():
         added = request.POST.get('add')
-        print added
+        #print added
     return added
 
 def generate(request, suggested_sequence, classes):
@@ -131,22 +131,22 @@ def generate(request, suggested_sequence, classes):
                 tutorial = Courses.objects.filter(sid__startswith=cc.sid, cid=cc.cid, type='tut')
                 classes.remove(tutorial[tutsection].id)
         suggested_sequence = Courses.objects.filter(id__in=classes)
-    for i in classes:
-        print i
+    #for i in classes:
+        #print i
     return render(request, 'schedule/schedule.html', context_instance = RequestContext(request, {'json_courses_registered': serializers.serialize('json',suggested_sequence, use_natural_foreign_keys = True),}))
 
 def solve(request, course, suggested_sequence, classes):
-    print "just recursed"
+    #print "just recursed"
     #print "course = %d, size = %d" % (course, len(suggested_sequence))
     if course == len(suggested_sequence):
-        print "how did i get here?"
+        #print "how did i get here?"
         solutions.extend(classes)
         suggested_sequence = Courses.objects.filter(id__in=solutions)
-        for i in suggested_sequence:
-            print i
+        #for i in suggested_sequence:
+            #print i
         pass
     else:
-        print "else %d" % (course)
+        #print "else %d" % (course)
         #for i in range(len(suggested_sequence))[course:]:
             #print suggested_sequence[i]
         filteri = Courses.objects.filter(cid=suggested_sequence[course].cid, type='lec')
@@ -162,47 +162,47 @@ def solve(request, course, suggested_sequence, classes):
                         for l in range(len(lab)):
                             if isAvail(lab[l].id, classes):
                             #if course >= 0:
-                                print "Lab is available"
+                                #print "Lab is available"
                                 if isAvail(tutorial[k].id, classes):
-                                    print "Tutorial is available"
+                                    #print "Tutorial is available"
                                 #if course >= 0:
                                     if isAvail(cc.id, classes):
-                                        print "Lecture is available"
+                                        #print "Lecture is available"
                                     #if course >= 0:
                                         #print "Lec = %s, Tut = %s, Lab = %s" % (cc, tutorial[k], lab[l])
                                         classes.append(cc.id)
                                         classes.append(tutorial[k].id)
                                         classes.append(lab[l].id)
-                                        print "%s: %s - %s - %s section appended" % (cc.cid.cid, cc.sid, tutorial[k].sid, lab[l].sid)
+                                        #print "%s: %s - %s - %s section appended" % (cc.cid.cid, cc.sid, tutorial[k].sid, lab[l].sid)
                                         solve(request, course+1, suggested_sequence, classes)
-                                        print "solved"
+                                        #print "solved"
                                         classes.remove(cc.id)
                                         classes.remove(tutorial[k].id)
                                         classes.remove(lab[l].id)
-                                        print "%s: %s - %s - %s section removed" % (cc.cid.cid, cc.sid, tutorial[k].sid, lab[l].sid)
+                                        #print "%s: %s - %s - %s section removed" % (cc.cid.cid, cc.sid, tutorial[k].sid, lab[l].sid)
                 else:
                     for k in range(len(tutorial)):
                         #if course >= 0:
                         if isAvail(tutorial[k].id, classes):
-                            print "Tutorial is available"
+                            #print "Tutorial is available"
                             #if course >= 0:
                             if isAvail(cc.id, classes):
-                                print "Lecture is available"
+                                #print "Lecture is available"
                                 #print "Lec = %s, Tut = %s" % (cc, tutorial[k])
                                 classes.append(cc.id)
                                 classes.append(tutorial[k].id)
-                                print "%s: %s - %s section appended" % (cc.cid.cid, cc.sid, tutorial[k].sid)
+                                #print "%s: %s - %s section appended" % (cc.cid.cid, cc.sid, tutorial[k].sid)
                                 solve(request, course+1, suggested_sequence, classes)
                                 classes.remove(cc.id)
                                 classes.remove(tutorial[k].id)
-                                print "%s: %s - %s section removed" % (cc.cid.cid, cc.sid, tutorial[k].sid)
+                                #print "%s: %s - %s section removed" % (cc.cid.cid, cc.sid, tutorial[k].sid)
             else:
                 #if course >= 0:
                 if isAvail(cc.id, classes):
-                    print "Lecture is available"
+                    #print "Lecture is available"
                     #print "Lec = %s" % (cc)
                     classes.append(cc.id)
-                    print "%s - %s section appended" % (cc.cid.cid, cc.sid)
+                    #print "%s - %s section appended" % (cc.cid.cid, cc.sid)
                     #print cc.cid
                     #solve(request, course+1, suggested_sequence, classes)
                     #classes.remove(cc.id)
@@ -239,5 +239,5 @@ def isAvail(course, classes):
                 return False
             elif assigned.timeslot2.starthour <= cc.timeslot2.endhour and cc.timeslot2.endhour <= assigned.timeslot2.endhour:
                 return False
-    print "TRUE"
+    #print "TRUE"
     return True
