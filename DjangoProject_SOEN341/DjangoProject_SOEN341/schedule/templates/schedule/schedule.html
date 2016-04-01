@@ -38,6 +38,7 @@
                         start = start.next();
                     }            
                     $(start).find('td')[day].style.backgroundColor = colors[i];
+                    $(start).find('td')[day].style.borderBottom = "1px solid "+colors[i];
                 
                     end_hour = timeslots[t][2].substring(0,2);
                     if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
@@ -59,6 +60,7 @@
                         m++;
                         end = end.prev();
                         $(end).find('td')[day].style.backgroundColor = colors[i];
+                        $(end).find('td')[day].style.borderBottom = "1px solid "+colors[i];
                     } while (!end.is(start));
                 
                     center = start;
@@ -68,6 +70,7 @@
                     }
 
                     $(center).prev().find('td')[day].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
+                    $(center).prev().find('td')[day].style.borderTop = "none !important";
                     $(center).find('td')[day].innerHTML =  courses[i].fields.lecturer + ' (' +courses[i].fields.room + ', ' + courses[i].fields.sid + ')';
                     $(center).next().find('td')[day].innerHTML = start_hour + ':' + start_minutes + ' - ' + end_hour + ':' + end_minutes;
 
