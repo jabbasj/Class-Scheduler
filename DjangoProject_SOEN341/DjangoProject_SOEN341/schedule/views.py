@@ -14,6 +14,10 @@ def schedule(request):
     if request.method == 'POST':
         return post_handler(request)
 
+    else:
+        if request.session['semester'] != None and request.session['year'] != None:
+            return post_handler(request)
+
     return render(
         request,
         'schedule/schedule.html',
@@ -39,6 +43,8 @@ def post_handler(request):
     if 'view' in request.POST.keys():
         chosen_semester = request.POST.get('semester')
         chosen_year = request.POST.get('year')
+        request.session['year'] = chosen_year
+        request.session['semester'] = chosen_semester
         try:
             student = Students.objects.get(email=request.user)
             registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False)
@@ -48,7 +54,20 @@ def post_handler(request):
 
         except Exception as e:
             courses_registered = None
-            courses_pending_confirmation = None
+    else:
+        chosen_semester = request.session['semester']
+        chosen_year = request.session['year']
+
+        try:
+            student = Students.objects.get(email=request.user)
+            registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False)
+
+            for reg in registered:
+                courses_registered.append(Courses.objects.get(cid=reg.cid, sid=reg.sectionid, semester=chosen_semester, year=chosen_year, type=reg.type))
+
+        except Exception as e:
+            courses_registered = None
+
 
     return render(
         request,

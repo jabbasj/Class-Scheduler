@@ -16,6 +16,7 @@ class Courses(models.Model):
     timeslot2 = models.ForeignKey('Timeslots', models.DO_NOTHING, db_column='timeSlot2', related_name='timeslot2')  # Field name made lowercase.
     description = models.CharField(max_length=1000, blank=True, null=True)
     capacity = models.IntegerField()
+    room = models.CharField(max_length=10)
 
     objects = models.Manager()
 
@@ -54,7 +55,7 @@ class Registered(models.Model):
     year = models.IntegerField()
     type = models.CharField(max_length=3)
     grade = models.CharField(max_length=4, blank=True, null=True)
-    finished = models.IntegerField(blank=True, null=True)
+    finished = models.IntegerField()
 
     objects = models.Manager()
 

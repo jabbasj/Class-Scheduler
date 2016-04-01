@@ -11,23 +11,19 @@
     function draw_schedule(input_courses) {
         schedule_table = document.getElementById("schedule_table");
         courses = {{ json_courses_registered | safe }}
-        colors = ["#9dd6d6", "orange", "#ff69b4", "#969696","#c3cb71", "#c7bbc9", "#83adb5", "#eb6841", "#559e83", "#edc951", "#e30074", "#ab8f8f", "#296967", "#ba3737", "#86d2dd", "#92c256"]
-
-        //to remove
-        console.log(courses);
+        colors = ["#9dd6d6", "orange", "#ff69b4", "#969696","#c3cb71", "#c7bbc9", "#83adb5", "#eb6841", "#559e83", "#edc951", "#e30074", "#ab8f8f", "#296967", "#ba3737", "#86d2dd", "#92c256"];
 
         for (i in courses) {
 
-            //timeslot1
-            start_hour = courses[i].fields.timeslot1[1].substring(0,2);
-            if (start_hour.startsWith('0')) {start_hour = start_hour[1];};
+            timeslots = [];
+            timeslots.push(courses[i].fields.timeslot1);
+            timeslots.push(courses[i].fields.timeslot2);
 
-            day = courses[i].fields.timeslot1[0];
+            for (t in timeslots) {
 
-            start = $(schedule_table).find("tr:contains('" + start_hour + ":00" +"')");
-            if (!start_hour.startsWith('0') && start[0] != undefined) {
-                start_minutes = courses[i].fields.timeslot1[1].substring(3,5);
+            day = timeslots[t][0] - 1;
 
+<<<<<<< HEAD
                 for (j = 0; j < parseInt(start_minutes)/15; j++) {
                     start = start.next();
                 }
@@ -35,9 +31,20 @@
 
                 end_hour = courses[i].fields.timeslot1[2].substring(0,2);
                 if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
+=======
+            if (day >= 0) {
 
-                end = $(schedule_table).find("tr:contains('" + end_hour + ":00" +"')");
+                start_hour = timeslots[t][1].substring(0,2);
+                if (start_hour.startsWith('0')) {start_hour = start_hour[1];}
+                if (start_hour.startsWith('no')) {start_hour = '12';}
+>>>>>>> c2d7d2f06f8e6cc6656ca7715c5e14ae21922502
 
+                start = $(schedule_table).find("tr th:contains('" + start_hour + ":00" +"')").parent();
+   
+                start_minutes = timeslots[t][1].substring(3,5);
+                if (start_minutes.startsWith('n')) {start_minutes = '00';}
+
+<<<<<<< HEAD
                 if (end[0] != undefined) {
                 end_minutes = courses[i].fields.timeslot1[2].substring(3,5);
                 for (j = 1; j < parseInt(end_minutes)/15; j++) {
@@ -67,10 +74,21 @@
            //same code as above for timeslot2
             start_hour = courses[i].fields.timeslot2[1].substring(0,2);
             if (start_hour.startsWith('0')) {start_hour = start_hour[1];};
+=======
+                    for (j = 0; j < parseInt(start_minutes)/15; j++) {            
+                        start = start.next();
+                    }            
+                    $(start).find('td')[day].style.backgroundColor = colors[i];
+                    $(start).find('td')[day].style.borderBottom = "1px solid "+colors[i];
+                
+                    end_hour = timeslots[t][2].substring(0,2);
+                    if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
+                    if (end_hour.startsWith('no')) {end_hour = '12';}
+>>>>>>> c2d7d2f06f8e6cc6656ca7715c5e14ae21922502
 
-            day = courses[i].fields.timeslot2[0];
-            start = $(schedule_table).find("tr:contains('" + start_hour + ":00" +"')");
+                    end = $(schedule_table).find("tr th:contains('" + end_hour + ":00" +"')").parent();
 
+<<<<<<< HEAD
             if (!start_hour.startsWith('0') && start[0] != undefined) {
                 start_minutes = courses[i].fields.timeslot2[1].substring(3,5);
 
@@ -98,12 +116,37 @@
                     end = end.prev();
                     $(end).find('td')[day-1].style.backgroundColor = colors[i];
                 } while (!end.is(start));
+=======
+                    if (end[0] != undefined) {
+                    end = end.prev();
+                    end_minutes = timeslots[t][2].substring(3,5);
+                    if (end_minutes.startsWith('n')) {end_minutes = '00';}
+                    for (j = 1; j <= parseInt(end_minutes)/15; j++) {            
+                            end = end.next();
+                        }            
+                        $(end).find('td')[day].style.backgroundColor = colors[i];
+                    }
+                    m = 0;
+                    do {
+                        m++;
+                        end = end.prev();
+                        $(end).find('td')[day].style.backgroundColor = colors[i];
+                        $(end).find('td')[day].style.borderBottom = "1px solid "+colors[i];
+                    } while (!end.is(start));
+                
+                    center = start;
 
-                center = start;
+                    for (k = 0; k < m /2; k++) {
+                    center = center.next();
+                    }
+>>>>>>> c2d7d2f06f8e6cc6656ca7715c5e14ae21922502
 
-                for (k = 1; k < m / 2 ; k++) {
-                center = center.next();
+                    $(center).prev().find('td')[day].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
+                    $(center).find('td')[day].innerHTML =  courses[i].fields.lecturer + ' (' +courses[i].fields.room + ', ' + courses[i].fields.sid + ')';
+                    $(center).next().find('td')[day].innerHTML = start_hour + ':' + start_minutes + ' - ' + end_hour + ':' + end_minutes;
+
                 }
+<<<<<<< HEAD
 
                 $(center).prev().find('td')[day-1].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
                 $(center).find('td')[day-1].innerHTML = courses[i].fields.sid;
@@ -111,6 +154,9 @@
 
             }
 
+=======
+            }            
+>>>>>>> c2d7d2f06f8e6cc6656ca7715c5e14ae21922502
         }
     };
 
@@ -121,10 +167,10 @@
 
 {% if chosen_semester and chosen_year %}
     <h2> {{ chosen_semester }}, {{ chosen_year }}</h2>
+    
 {% else %}
     <h2>Please choose a semester...</h2>
 {% endif %}
-
         <div class="container"  style="text-align:right">
             <form method="POST">
             {% csrf_token %}

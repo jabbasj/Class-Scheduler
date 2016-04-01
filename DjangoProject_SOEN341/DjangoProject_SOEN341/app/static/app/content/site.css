@@ -86,4 +86,6 @@ input[type="checkbox"].input-validation-error {
 #schedule_table td { 
     font-family:sans-serif; 
     font-size:11px; 
-    font-weight: bold;}
+    font-weight: bold;
+    max-height: 11px;
+}
