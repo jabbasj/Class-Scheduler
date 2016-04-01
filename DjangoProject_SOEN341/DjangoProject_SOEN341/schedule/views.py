@@ -28,7 +28,7 @@ def schedule(request):
 
 
 def post_handler(request):
-    
+
     chosen_semester = None
     chosen_year = None
     student = None

@@ -2,7 +2,7 @@
 {% block content %}
 <style>
 .navbar {
-    top: -70px;
+    top: -50px;
 }
 </style>
 {% if user.is_authenticated %}
@@ -31,7 +31,7 @@
                 for (j = 0; j < parseInt(start_minutes)/15; j++) {
                     start = start.next();
                 }
-                $(start).find('td')[day].style.backgroundColor = colors[i];
+                $(start).find('td')[day-1].style.backgroundColor = colors[i];
 
                 end_hour = courses[i].fields.timeslot1[2].substring(0,2);
                 if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
@@ -43,13 +43,13 @@
                 for (j = 1; j < parseInt(end_minutes)/15; j++) {
                         end = end.next();
                     }
-                    $(end).find('td')[day].style.backgroundColor = colors[i];
+                    $(end).find('td')[day-1].style.backgroundColor = colors[i];
                 }
                 m = 0;
                 do {
                     m++;
                     end = end.prev();
-                    $(end).find('td')[day].style.backgroundColor = colors[i];
+                    $(end).find('td')[day-1].style.backgroundColor = colors[i];
                 } while (!end.is(start));
 
                 center = start;
@@ -58,9 +58,9 @@
                 center = center.next();
                 }
 
-                $(center).prev().find('td')[day].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
-                $(center).find('td')[day].innerHTML = courses[i].fields.sid;
-                $(center).next().find('td')[day].innerHTML = courses[i].fields.lecturer;
+                $(center).prev().find('td')[day-1].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
+                $(center).find('td')[day-1].innerHTML = courses[i].fields.sid;
+                $(center).next().find('td')[day-1].innerHTML = courses[i].fields.lecturer;
 
             }
 
@@ -77,7 +77,7 @@
                 for (j = 0; j < parseInt(start_minutes)/15; j++) {
                     start = start.next();
                 }
-                $(start).find('td')[day].style.backgroundColor = colors[i];
+                $(start).find('td')[day-1].style.backgroundColor = colors[i];
 
                 end_hour = courses[i].fields.timeslot2[2].substring(0,2);
                 if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
@@ -89,14 +89,14 @@
                 for (j = 1; j < parseInt(end_minutes)/15; j++) {
                         end = end.next();
                     }
-                    $(end).find('td')[day].style.backgroundColor = colors[i];
+                    $(end).find('td')[day-1].style.backgroundColor = colors[i];
                 }
 
                 m = 0;
                 do {
                     m++;
                     end = end.prev();
-                    $(end).find('td')[day].style.backgroundColor = colors[i];
+                    $(end).find('td')[day-1].style.backgroundColor = colors[i];
                 } while (!end.is(start));
 
                 center = start;
@@ -105,9 +105,9 @@
                 center = center.next();
                 }
 
-                $(center).prev().find('td')[day].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
-                $(center).find('td')[day].innerHTML = courses[i].fields.sid;
-                $(center).next().find('td')[day].innerHTML = courses[i].fields.lecturer;
+                $(center).prev().find('td')[day-1].innerHTML = courses[i].fields.cid + ' (' + courses[i].fields.type + ')';
+                $(center).find('td')[day-1].innerHTML = courses[i].fields.sid;
+                $(center).next().find('td')[day-1].innerHTML = courses[i].fields.lecturer;
 
             }
 
@@ -130,7 +130,7 @@
             {% csrf_token %}
             <label>Semester
                 <select name="semester" class="form-control">
-                    <<option selected disabled>Select Semester</option>
+                    <option selected disabled>Select Semester</option>
                     <option value="Fall">Fall</option>
                     <option value="Winter">Winter</option>
                     <option value="Summer">Summer</option>
