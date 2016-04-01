@@ -85,10 +85,10 @@
 
 {% if chosen_semester and chosen_year %}
     <h2> {{ chosen_semester }}, {{ chosen_year }}</h2>
+    
 {% else %}
     <h2>Please choose a semester...</h2>
 {% endif %}
-
         <div class="container"  style="text-align:right">
             <form method="POST">
             {% csrf_token %}

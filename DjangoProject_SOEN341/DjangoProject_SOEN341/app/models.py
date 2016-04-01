@@ -55,7 +55,7 @@ class Registered(models.Model):
     year = models.IntegerField()
     type = models.CharField(max_length=3)
     grade = models.CharField(max_length=4, blank=True, null=True)
-    finished = models.IntegerField(blank=True, null=True)
+    finished = models.IntegerField()
 
     objects = models.Manager()
 
