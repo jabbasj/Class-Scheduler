@@ -18,37 +18,29 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `registered`
+-- Table structure for table `django_session`
 --
 
-DROP TABLE IF EXISTS `registered`;
+DROP TABLE IF EXISTS `django_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `registered` (
-  `studentId` int(11) NOT NULL,
-  `cId` varchar(8) NOT NULL,
-  `sectionId` varchar(8) NOT NULL,
-  `semester` varchar(6) NOT NULL,
-  `year` int(11) NOT NULL,
-  `type` varchar(3) NOT NULL,
-  `grade` varchar(4) DEFAULT NULL,
-  `finished` tinyint(1) NOT NULL DEFAULT '0',
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`),
-  KEY `studentId` (`studentId`),
-  KEY `cId` (`cId`,`sectionId`,`semester`,`year`,`type`),
-  CONSTRAINT `registered_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `students` (`sId`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+CREATE TABLE `django_session` (
+  `session_key` varchar(40) NOT NULL,
+  `session_data` longtext NOT NULL,
+  `expire_date` datetime(6) NOT NULL,
+  PRIMARY KEY (`session_key`),
+  KEY `django_session_de54fa62` (`expire_date`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `registered`
+-- Dumping data for table `django_session`
 --
 
-LOCK TABLES `registered` WRITE;
-/*!40000 ALTER TABLE `registered` DISABLE KEYS */;
-INSERT INTO `registered` VALUES (10001011,'COMP 232','NN','winter',2016,'lec','43',1,1),(10001011,'COMP 232','NN','winter',2016,'lec','43',0,2),(10002032,'COMP 332','NN','winter',2016,'lec','43',0,3),(10001011,'COMP 249','QQ','winter',2016,'lec','##',0,4),(10001011,'COMP 232','NN','winter',2016,'lec','43',1,5),(10001011,'COMP 352','X','winter',2016,'lec','##',0,6),(10001011,'ENGR 243','X','winter',2016,'lec','',0,7);
-/*!40000 ALTER TABLE `registered` ENABLE KEYS */;
+LOCK TABLES `django_session` WRITE;
+/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('9qnoqvz6q0arj7626yp3rxki5pk646qv','MGY0ODg5MjY5OWI3ODE3ZmFlNmRhZjM4N2JhOWYxNmEyZWMwOTAzNjp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjEwMDAxMDExIiwic2VtZXN0ZXIiOiJTdW1tZXIiLCJ5ZWFyIjoiMjAxNyIsIl9hdXRoX3VzZXJfaGFzaCI6IjlkMDYzMWZmMDFjNGVhMTUyMTJlMmE4NWYwYjU4NWE5ZGFlMTc5MWMifQ==','2016-04-16 19:11:57.032505'),('fjh86gbb11xq98xq4tg48ctzegubj83w','ZDY1MTc0NDE2NmE1YTliZTJkN2UwOTgwNGM5NjdkNzdjOWNjYzk1Yzp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjEwMDAxMDExIiwiX2F1dGhfdXNlcl9oYXNoIjoiODJjNzJhMjU4ODQ4MGQ4NTM4NDFhMTgzZjZkMjZjOWJlNTgwNTIzZiJ9','2016-03-25 03:07:32.710914');
+/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -60,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-01 11:26:28
+-- Dump completed on 2016-04-02 15:13:06

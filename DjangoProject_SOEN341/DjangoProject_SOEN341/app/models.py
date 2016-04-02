@@ -59,6 +59,17 @@ class Registered(models.Model):
 
     objects = models.Manager()
 
+    @classmethod
+    def create(cls, student_id, course_id, section_id, _semester, _year, _type, _grade, _finished):
+        new_registery = cls(studentid=student_id, cid=course_id, sectionid=section_id, semester=_semester, year=_year, type=_type, grade=_grade, finished=_finished)
+        new_registery.save()
+
+        course_to_update_capacity = Courses.objects.get(cid=Sequence.objects.get(cid=course_id), sid=section_id, type=_type) #semester=_semester, year=_year
+        course_to_update_capacity.capacity -= 1
+        course_to_update_capacity.save()
+
+        return new_registery
+
     def __str__(self):
        return str(self.studentid) + ' in ' + self.cid + ', ' + self.sectionid + ' - ' + self.semester + ', ' + str(self.year) + ' - ' + self.grade
 

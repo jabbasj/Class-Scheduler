@@ -130,13 +130,13 @@
     };
 </script>
 
-{% if chosen_semester and chosen_year %}
-    <h2> {{ chosen_semester }}, {{ chosen_year }}</h2>
-    
+{% if chosen_semester and chosen_year %}    
+    <h1> {{ chosen_semester }}, {{ chosen_year }}</h1>   
 {% else %}
     <h2>Please choose a semester...</h2>
 {% endif %}
-        <div class="container"  style="text-align:right">
+
+        <div id="view_schedule" class="container" style="text-align:right">
             <form method="POST">
             {% csrf_token %}
             <label>Semester
@@ -162,6 +162,125 @@
                 <button type="submit" class="btn btn-success btn-md" name="view">View</button>
             </form>
         </div>
+
+<div id="search_and_add">
+
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-md" name="search">Search</button>
+        </form>
+        <br />
+
+    {% if combo_registered_success == True %}
+
+        <div class="alert alert-success">
+             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+             <strong>Success!</strong> Registered to course(s)!
+        </div>
+
+    {% elif combo_registered_success == False  %}
+
+        <div class="alert alert-danger">
+             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+             <strong>Error!</strong> Course(s) not registered because of time conflict, max credits or invalid selection!
+        </div>
+
+    {% endif %}
+
+        {% if potential_courses %}
+        <form method="post">
+            {% csrf_token %}
+            <div class="panel-group" id="accordion">
+                {% for potential_course in potential_courses %}
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#{{potential_course.id}}">{{potential_course.cid}} (Credits: {{potential_course.credits}})</a>
+                        <span class="pull-right"><button type="submit" class="btn btn-success btn-xs" style="text-align:right" name="check_sections" value="{{potential_course.cid}}">Add</button></span>
+                      </h4>
+                    </div>
+                    <div id="{{potential_course.id}}" class="panel-collapse collapse">
+                      <div class="panel-body">{{ potential_course.description }}<br />Capacity: {{potential_course.capacity}}</div>
+                    </div>
+                  </div>
+                {% endfor %}    
+            </div>
+        </form>
+        {% else %}
+            <div class="alert alert-info">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Info!</strong> Choose a semester then click 'search' to browse and manually add courses available to you!
+            </div>
+        {% endif %}
+        {% if potential_courses_success == False %}
+            <div class="alert alert-danger">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Error!</strong> No classes available to you!
+            </div>
+        {% endif %}
+</div>
+
+<div id="add_course_overlay">
+     <div class="parent">
+         <h4>Add course manually{% if lectures %} ({{lectures.0.cid.cid}}) {% endif %}</h4><hr />
+         <form method="post">
+          {% csrf_token %}
+             
+             <div class="container  well well-sm pre-scrollable">
+
+            {% if lectures %}            
+                <table class="table" style="float: left; width:30%">
+                    <thead>
+                        <tr><th>Lectures</th></tr>
+                    </thead>
+
+                    <tbody>
+                        {% for lec in lectures %}
+                        <tr><td><span class="pull-left"><input type="radio" name="{{lec.type}}" value="{{lec.sid}}"></span><strong>{{ lec.sid }}</strong>{% if lec.lecturer %}<br />Prof: {{lec.lecturer}}{% endif %}{% if lec.timeslot1.day %}<br /><script>document.write(convert_day({{lec.timeslot1.day}}))</script> {{lec.timeslot1.starthour}} - {{lec.timeslot1.endhour}}{% endif %} {% if lec.timeslot2.day %}<br /><script>document.write(convert_day({{ lec.timeslot2.day}}))</script> {{lec.timeslot2.starthour}} - {{lec.timeslot2.endhour}}{% endif %}</td></tr>
+                        {% endfor %}   
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if tutorials %}            
+                <table class="table" style="float: left; width:30%">
+                    <thead>
+                        <tr><th>Tutorials</th></tr>
+                    </thead>
+
+                    <tbody>
+                        {% for tut in tutorials %}
+                        <tr><td><span class="pull-left"><input type="radio" name="{{tut.type}}" value="{{tut.sid}}" disabled></span><strong>{{ tut.sid }}</strong><br />{% if tut.timeslot1.day %}<script>document.write(convert_day({{tut.timeslot1.day}}))</script> {{tut.timeslot1.starthour}} - {{tut.timeslot1.endhour}}{% endif %} {% if tut.timeslot2.day %}<br /><script>document.write(convert_day({{tut.timeslot2.day}}))</script> {{tut.timeslot2.starthour}} - {{tut.timeslot2.endhour}}{% endif %}</td></tr>
+                        {% endfor %}   
+                    </tbody>
+                </table>    
+            {% endif %}
+
+            {% if labs %}            
+                <table class="table" style="float: left; width:30%">
+                    <thead>
+                        <tr><th>Labs</th></tr>
+                    </thead>
+
+                    <tbody>
+                        {% for lab in labs %}
+                        <tr><td><span class="pull-left"><input type="radio" name="{{lab.type}}" value="{{lab.sid}}" disabled></span><strong>{{ lab.sid }}</strong><br />{% if lab.timeslot1.day %}<script>document.write(convert_day({{lab.timeslot1.day}}))</script> {{lab.timeslot1.starthour}} - {{lab.timeslot1.endhour}}{% endif %} {% if lab.timeslot2.day %}<script>document.write(convert_day({{lab.timeslot2.day}}))</script> {{lab.timeslot2.starthour}} - {{lab.timeslot2.endhour}}{% endif %}</td></tr>
+                        {% endfor %}   
+                    </tbody>
+                </table>    
+            {% else %}
+            {% endif %}
+
+            </div>
+                  
+         <button type="button" class="btn btn-danger btn-xs" onclick="add_course_overlay()">Cancel</button>
+         <button type="submit" class="btn btn-success btn-xs" name="register_combo" value="{{lectures.0.cid.cid}}" onclick="">Submit</button>             
+         </form>  
+     </div>
+</div>
+
+<hr />
+
         <div class="container">
             <table id="schedule_table" class="table table-bordered table-striped" style="font-family:verdana;">
                 <tr class="info">
@@ -750,107 +869,6 @@
                 </tr>
             </table>
         </div>
-<br />
-<hr />
-<div id="search_and_add">
-
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary btn-md" name="search">Search</button>
-        </form>
-        <br /><br />
-
-        {% if potential_courses %}
-        <form method="post">
-            {% csrf_token %}
-            <div class="panel-group" id="accordion">
-                {% for potential_course in potential_courses %}
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#{{potential_course.id}}">{{potential_course.cid}}</a>
-                        <span class="pull-right"><button type="submit" class="btn btn-success btn-xs" style="text-align:right" name="check_sections" value="{{potential_course.cid}}">Add</button></span>
-                      </h4>
-                    </div>
-                    <div id="{{potential_course.id}}" class="panel-collapse collapse">
-                      <div class="panel-body">{{ potential_course.description }}</div>
-                    </div>
-                  </div>
-                {% endfor %}    
-            </div>
-        </form>
-        {% else %}
-            <div class="alert alert-info">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <strong>Info!</strong> Choose a semester then click 'search' to browse and manually add courses available to you!
-            </div>
-        {% endif %}
-        {% if potential_courses_success == False %}
-            <div class="alert alert-danger">
-              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              <strong>Error!</strong> No classes available to you!
-            </div>
-        {% endif %}
-</div>
-
-<div id="add_course_overlay">
-     <div class="parent">
-         <h4>Add course manually{% if lectures %} ({{lectures.0.cid.cid}}) {% endif %}</h4><hr />
-         <form method="post">
-          {% csrf_token %}
-             
-             <div class="container">
-
-            {% if lectures %}            
-                <table class="table" style="float: left; width:30%">
-                    <thead>
-                        <tr><th>Lectures</th></tr>
-                    </thead>
-
-                    <tbody>
-                        {% for lec in lectures %}
-                        <tr><td><span class="pull-left"><input type="radio" name="{{lec.type}}" value="{{lec.sid}}"></span><strong>{{ lec.sid }}</strong><br />{% if lec.timeslot1.day %}<script>document.write(convert_day({{lec.timeslot1.day}}))</script> {{lec.timeslot1.starthour}} - {{lec.timeslot1.endhour}}{% endif %} {% if lec.timeslot2.day %}<br /><script>document.write(convert_day({{ lec.timeslot2.day}}))</script> {{lec.timeslot2.starthour}} - {{lec.timeslot2.endhour}}{% endif %}</td></tr>
-                        {% endfor %}   
-                    </tbody>
-                </table>
-            {% endif %}
-
-            {% if tutorials %}            
-                <table class="table" style="float: left; width:30%">
-                    <thead>
-                        <tr><th>Tutorials</th></tr>
-                    </thead>
-
-                    <tbody>
-                        {% for tut in tutorials %}
-                        <tr><td><span class="pull-left"><input type="radio" name="{{tut.type}}" value="{{tut.sid}}" disabled></span><strong>{{ tut.sid }}</strong><br />{% if tut.timeslot1.day %}<script>document.write(convert_day({{tut.timeslot1.day}}))</script> {{tut.timeslot1.starthour}} - {{tut.timeslot1.endhour}}{% endif %} {% if tut.timeslot2.day %}<br /><script>document.write(convert_day({{tut.timeslot2.day}}))</script> {{tut.timeslot2.starthour}} - {{tut.timeslot2.endhour}}{% endif %}</td></tr>
-                        {% endfor %}   
-                    </tbody>
-                </table>    
-            {% endif %}
-
-            {% if labs %}            
-                <table class="table" style="float: left; width:30%">
-                    <thead>
-                        <tr><th>Labs</th></tr>
-                    </thead>
-
-                    <tbody>
-                        {% for lab in labs %}
-                        <tr><td><span class="pull-left"><input type="radio" name="{{lab.type}}" value="{{lab.sid}}" disabled></span><strong>{{ lab.sid }}</strong><br />{% if lab.timeslot1.day %}<script>document.write(convert_day({{lab.timeslot1.day}}))</script> {{lab.timeslot1.starthour}} - {{lab.timeslot1.endhour}}{% endif %} {% if lab.timeslot2.day %}<script>document.write(convert_day({{lab.timeslot2.day}}))</script> {{lab.timeslot2.starthour}} - {{lab.timeslot2.endhour}}{% endif %}</td></tr>
-                        {% endfor %}   
-                    </tbody>
-                </table>    
-            {% else %}
-            {% endif %}
-
-            </div>
-                  
-         <button type="button" class="btn btn-danger btn-xs" onclick="add_course_overlay()">Cancel</button>
-         <button type="submit" class="btn btn-success btn-xs" value="register_course" onclick="add_course_overlay()">Submit</button>             
-         </form>  
-     </div>
-</div>
 
 {% else %}
     <div class="alert alert-danger">
