@@ -9,6 +9,7 @@ from app.models import Students, Sequence, Registered, Courses, Prerequisites, T
 
 added_courses = []
 solutions = []
+constraints = 1
 
 def workshop(request):
     """Renders the workshop page."""
@@ -43,6 +44,7 @@ def workshop(request):
         {
             'title':'Workshop',
             'suggested_sequence': suggested_sequence,
+            'constraints': constraints,
             'semester': semester,
             'year': year,
             'message':'Your workshop page.',
