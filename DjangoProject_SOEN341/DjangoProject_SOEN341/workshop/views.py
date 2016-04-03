@@ -21,9 +21,12 @@ def workshop(request):
     #for i in range(len(suggested_sequence))[0:]:
     #    print i
 
+    # Get constraints
     if request.POST.get('add'):
         added = request.POST.getlist('add')
+        dayofweek, classes, location = constraints(request)
 
+    # Get semester and year
     if request.method == 'POST':
         semester, year = semester_select(request)
         #print semester
@@ -53,6 +56,12 @@ def workshop(request):
             'year':datetime.now().year,
         })
     )
+
+def constraints(request):
+    dow = request.POST.getlist('day')
+    cl = request.POST.getlist('classes')
+    loc = request.POST.getlist('location')
+    return dow, cl, loc
 
 def semester_select(request):
     chosen_semester = None
