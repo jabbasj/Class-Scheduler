@@ -38,17 +38,12 @@
       </form>
   </div>
   {% if semester %}
-  <p>Suggested sequence for {{ semester }} {{ year }}:</p>
-      {% for course in suggested_sequence %}
-      <form action="/workshop/" role="form" method="POST" id="addcourse">
-      {% csrf_token %}
-      <p>{{ course.cid }}
-        <button type="submit" class="btn btn-success" form="addcourse" onClick="this.form.submit(); this.disabled=true; this.value='add';" name="{{ course.cid }}" value="add">Add</button></p>
-      {% endfor %}
-      </form>
-
       <form action="/workshop/" role="form" method="POST" id="constraints">
         {% csrf_token %}
+          <p>Suggested sequence for {{ semester }} {{ year }}:</p>
+          {% for course in suggested_sequence %}
+          <p><input type="checkbox" name="add" value="{{ course.cid }}" checked> {{ course.cid }}<p>
+          {% endfor %}
           <p>Days of Week:
           <input type="checkbox" name="monday" value="monday" checked> Monday
           <input type="checkbox" name="tuesday" value="tuesday" checked> Tuesday

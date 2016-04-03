@@ -9,7 +9,6 @@ from app.models import Students, Sequence, Registered, Courses, Prerequisites, T
 
 added_courses = []
 solutions = []
-constraints = 1
 
 def workshop(request):
     """Renders the workshop page."""
@@ -21,6 +20,10 @@ def workshop(request):
     suggested_sequence = Sequence.objects.exclude(cid__in=finish_exclude).order_by('year', 'semester', 'cid').filter(year='1', semester='fall')
     #for i in range(len(suggested_sequence))[0:]:
     #    print i
+
+    if request.POST.get('add'):
+        added = request.POST.getlist('add')
+
     if request.method == 'POST':
         semester, year = semester_select(request)
         #print semester
@@ -44,7 +47,6 @@ def workshop(request):
         {
             'title':'Workshop',
             'suggested_sequence': suggested_sequence,
-            'constraints': constraints,
             'semester': semester,
             'year': year,
             'message':'Your workshop page.',
@@ -70,13 +72,6 @@ def semester_select(request):
             courses_registered = None
             courses_pending_confirmation = None
     return chosen_semester, chosen_year
-
-def addcourse(request):
-    added = None
-    if 'view' in request.POST.keys():
-        added = request.POST.get('add')
-        #print added
-    return added
 
 def generate(request, suggested_sequence, classes):
     tutsection = 0
