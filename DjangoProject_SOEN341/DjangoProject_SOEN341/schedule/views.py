@@ -200,6 +200,7 @@ def check_conflicts_and_register_student_to(request, lec, lab, tut):
                     lab = lab[0]
                 else:
                     lab = None
+
                 success, new_registeries = register_student_to(request, lec, tut, lab, chosen_semester, chosen_year)
 
     except Exception as e:
@@ -430,7 +431,7 @@ def remove_completed_by_student(request, courses):
     if (courses != None):
         try:
             for i in courses:
-                if check_if_course_passed(request, courses) == False:
+                if check_if_course_passed(request, i) == False:
                     not_completed_yet.append(i)
 
         except Exception as e:
@@ -487,15 +488,15 @@ def remove_prereqs_missing(request, courses):
 
 
 # helper function that evaluates if a course has been finisehd with passing grade
-def check_if_course_passed(request, courseid):
+def check_if_course_passed(request, course):
     try:
-        finished_course = Registered.objects.filter(cid=courseid, studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
-        registered_course = Registered.objects.filter(cid=courseid, studentid = Students.objects.get(email=request.user).sid, finished = False, type = 'lec')
+        finished_course = Registered.objects.filter(cid=course.cid, studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
+        registered_course = Registered.objects.filter(cid=course.cid, studentid = Students.objects.get(email=request.user).sid, finished = False, type = 'lec')
 
         chosen_semester = request.session['semester']       
         chosen_year = int(request.session['year'])
 
-        if len(finished_course) == 1 and int(finished_course[0].grade) >= 50:
+        if len(finished_course) == 1 and finished_course[0].grade != '' and int(finished_course[0].grade) >= 50:
             return True
 
         if len(registered_course) == 1:
@@ -535,8 +536,16 @@ def remove_currently_registered(request, courses):
 def remove_full_courses(request, courses):
     courses_with_capacity = []
 
+    chosen_semester = request.session['semester']       
+    chosen_year = int(request.session['year'])
+
     for i in courses:
-        if i.capacity > 0:
+
+        capacity = 0
+
+        registered_courses = Registered.objects.filter(cid = i.cid, sectionid=i.sid, finished = False, semester=chosen_semester, year=chosen_year, type = i.type)
+
+        if len(registered_courses) < i.capacity:
             courses_with_capacity.append(i)
 
     return courses_with_capacity
@@ -558,10 +567,4 @@ def json_serialize(courses):
 # set with cache.set('key', 'cache_name')
 def cached_queries(key):
     return {'cache': cache.get(key)}
-
-
-# MISSING LOGIC: projected completed prereqs
-#                unregistering courses
-
-# update dump on live server
 
