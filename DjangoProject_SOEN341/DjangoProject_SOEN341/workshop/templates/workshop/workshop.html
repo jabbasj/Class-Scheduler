@@ -37,53 +37,33 @@
           <button type="submit" class="btn btn-success btn-md" name="view">View</button>
       </form>
   </div>
-  <form action="/workshop/" role="form" method="POST" id="gensched">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-default" form="gensched" name="gensched" value="gensched">Generate</button>
-  </form>
   {% if semester %}
-  <p>Suggested sequence for {{ semester }} {{ year }}:</p>
-      {% for course in suggested_sequence %}
-      <form action="/workshop/" role="form" method="POST" id="addcourse">
-      {% csrf_token %}
-      <p>{{ course.cid }}
-        <button type="submit" class="btn btn-success" form="addcourse" onClick="this.form.submit(); this.disabled=true; this.value='add';" name="{{ course.cid }}" value="add">Add</button></p>
-      {% endfor %}
+      <form action="/workshop/" role="form" method="POST" id="constraints">
+        {% csrf_token %}
+          <p>Suggested sequence for {{ semester }} {{ year }}:</p>
+          {% for course in suggested_sequence %}
+          <p><input type="checkbox" name="add" value="{{ course.cid }}" checked> {{ course.cid }}<p>
+          {% endfor %}
+          <p>Days of Week:
+          <input type="checkbox" name="day" value="1" checked> Monday
+          <input type="checkbox" name="day" value="2" checked> Tuesday
+          <input type="checkbox" name="day" value="3" checked> Wednesday
+          <input type="checkbox" name="day" value="4" checked> Thursday
+          <input type="checkbox" name="day" value="5" checked> Friday</p>
+          <p>Classes:
+          <input type="checkbox" name="classes" value="morning" checked> Morning Classes
+          <input type="checkbox" name="classes" value="afternoon" checked> Afternoon Classes
+          <input type="checkbox" name="classes" value="evening" checked> Evening Classes
+          <input type="checkbox" name="classes" value="summer" checked> Summer Classes
+          <input type="checkbox" name="classes" value="split" checked> Split Lectures</p>
+          <p>Location:
+          <input type="checkbox" name="location" value="sgw" checked> Sir George Williams (Downtown)
+          <input type="checkbox" name="location" value="online"> Online</p>
+          <button type="submit" class="btn btn-default" form="constraints" name="constraints" value="constraints">Generate</button>
       </form>
   {% else %}
   {% endif %}
   {% endif %}
-  {% if constraints %}
-    <form action="/workshop/" role="form" method="POST" id="constraints">
-      {% csrf_token %}
-      <table>
-        <tr><td>Days of Week:</td></tr>
-        <tr><td><input type="checkbox" name="monday" value="monday" checked> Monday</td></tr>
-        <tr><td><input type="checkbox" name="tuesday" value="tuesday" checked> Tuesday</td></tr>
-        <tr><td><input type="checkbox" name="wednesday" value="wednesday" checked> Wednesday</td></tr>
-        <tr><td><input type="checkbox" name="thursday" value="thursday" checked> Thursday</td></tr>
-        <tr><td><input type="checkbox" name="friday" value="friday" checked> Friday</td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td><input type="checkbox" name="morning" value="morning" checked> Morning Classes</td></tr>
-        <tr><td><input type="checkbox" name="afternoon" value="afternoon" checked> Afternoon Classes</td></tr>
-        <tr><td><input type="checkbox" name="evening" value="evening" checked> Evening Classes</td></tr>
-        <tr><td><input type="checkbox" name="summer" value="summer" checked> Summer Classes</td></tr>
-        <tr><td><input type="checkbox" name="split" value="split" checked> Split Lectures</td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td>Location:</td></tr>
-        <tr><td><input type="checkbox" name="sgw" value="sgw" checked> Sir George Williams (Downtown)</td></tr>
-        <tr><td><input type="checkbox" name="online" value="online"> Online</td></tr>
-        <tr><td></td></tr>
-        <tr><td><button type="submit" class="btn btn-default btn-xs" form="constraints" value="generate">Generate</button></td></tr>
-      </table>
-    </form>
-  {% endif %}
-
-    {% if suggested_sequence %}
-
-    {% endif %}
 
     {% if prerequisites %}
     <p>Prerequisites:</p>
