@@ -13,43 +13,60 @@ solutions = []
 def workshop(request):
     """Renders the workshop page."""
     assert isinstance(request, HttpRequest)
-    classes = []
-    studentID = Students.objects.get(email=request.user)
-    finished = Registered.objects.filter(finished=1).filter(studentid=studentID)
-    finish_exclude = [i.cid for i in finished]
-    suggested_sequence = Sequence.objects.exclude(cid__in=finish_exclude).order_by('year', 'semester', 'cid').filter(year='1', semester='fall')
-    #for i in range(len(suggested_sequence))[0:]:
-    #    print i
+    if (request.user.is_authenticated()):
+        classes = []
+        studentID = Students.objects.get(email=request.user)
+        finished = Registered.objects.filter(finished=1).filter(studentid=studentID)
+        finish_exclude = [i.cid for i in finished]
+        suggested_sequence = Sequence.objects.exclude(cid__in=finish_exclude).order_by('year', 'semester', 'cid').filter(year='1', semester='fall')
+        #for i in range(len(suggested_sequence))[0:]:
+        #    print i
 
-    # Get semester and year
-    if request.method == 'POST':
-        semester, year = semester_select(request)
-        #print semester
-        #print year
-        if semester != None:
-            sem = semester.lower()
-            suggested_sequence = Sequence.objects.exclude(cid__in=finish_exclude).order_by('year', 'semester', 'cid').filter(year='1', semester=sem)
-    else:
-        semester = None
-        year = None
+        # Get semester and year
+        if request.method == 'POST':
+            semester, year = semester_select(request)
+            #print semester
+            #print year
+            if semester != None:
+                sem = semester.lower()
+                suggested_sequence = Sequence.objects.exclude(cid__in=finish_exclude).order_by('year', 'semester', 'cid').filter(year='1', semester=sem)
+        else:
+            semester = None
+            year = None
 
-    # Get constraints
-    if request.POST.get('constraints'):
-        added, dayofweek, courses, location = constraints(request)
-        added2 = Sequence.objects.filter(cid__in=added).filter(semester='winter', year='1')
-        solutions2 = solve(request, 0, added2, classes)
-        for i in solutions2:
-            print i
-        suggested_sequence2 = Courses.objects.filter(id__in=solutions2)
-        for i in suggested_sequence2:
-            print i
-            print "%s - %s" % (i.timeslot1.starthour, i.timeslot1.endhour)
-        return render(request, 'schedule/schedule.html', context_instance = RequestContext(request, {'json_courses_registered': serializers.serialize('json', suggested_sequence2, use_natural_foreign_keys = True),}))
+        # Get constraints
+        if request.POST.get('constraints'):
+            added, dayofweek, courses, location = constraints(request)
+            added2 = Sequence.objects.filter(cid__in=added).filter(semester='winter', year='1')
+            solutions2 = solve(request, 0, added2, classes)
+            semester = 'winter'
+            year = '2016'
+            #return solve(request, 0, added2, classes)
+            for i in solutions2:
+                print i
+            suggested_sequence2 = Courses.objects.filter(id__in=solutions2)
+            for i in suggested_sequence2:
+                print i
+                print "%s - %s" % (i.timeslot1.starthour, i.timeslot1.endhour)
+            #for j in suggested_sequence2:
+            #    Registered.create(studentID, j.cid.cid, j.sid, semester, year, j.type, '', False )
+            request.session['year'] = '2016'
+            request.session['semester'] = 'winter'
+            return render(request, 'schedule/schedule.html', context_instance = RequestContext(request, {'json_courses_registered': serializers.serialize('json', suggested_sequence2, use_natural_foreign_keys = True),}))
 
-    #if request.POST.get('add'):
-    #    added = request.POST.get('add')
-    #    print 'hey'
-    #    added_courses.append(added)
+        return render(
+            request,
+            'workshop/workshop.html',
+            context_instance = RequestContext(request,
+            {
+                'title':'Workshop',
+                'suggested_sequence': suggested_sequence,
+                'semester': semester,
+                'year': year,
+                'message':'Your workshop page.',
+                'year':datetime.now().year,
+            })
+        )
 
     return render(
         request,
@@ -57,9 +74,6 @@ def workshop(request):
         context_instance = RequestContext(request,
         {
             'title':'Workshop',
-            'suggested_sequence': suggested_sequence,
-            'semester': semester,
-            'year': year,
             'message':'Your workshop page.',
             'year':datetime.now().year,
         })
@@ -104,6 +118,8 @@ def solve(request, course, suggested_sequence, classes):
         #suggested_sequence = Courses.objects.filter(id__in=solutions)
         for i in solutions:
             print i
+        #suggested_sequence2 = Courses.objects.filter(id__in=solutions)
+        #return render(request, 'schedule/schedule.html', context_instance = RequestContext(request, {'json_courses_registered': serializers.serialize('json', suggested_sequence2, use_natural_foreign_keys = True),}))
         return solutions
     else:
         #print "else %d" % (course)
