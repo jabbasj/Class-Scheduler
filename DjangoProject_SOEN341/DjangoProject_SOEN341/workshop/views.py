@@ -7,6 +7,8 @@ from django.core import serializers
 
 from app.models import Students, Sequence, Registered, Courses, Prerequisites, Timeslots
 
+from django.shortcuts import redirect
+
 added_courses = []
 solutions = []
 
@@ -18,7 +20,7 @@ def workshop(request):
         studentID = Students.objects.get(email=request.user)
         finished = Registered.objects.filter(finished=1).filter(studentid=studentID)
         finish_exclude = [i.cid for i in finished]
-        suggested_sequence = Sequence.objects.exclude(cid__in=finish_exclude).order_by('year', 'semester', 'cid').filter(year='1', semester='fall')
+        suggested_sequence = Sequence.objects.exclude(cid__in=finish_exclude).order_by('year', 'semester', 'cid').filter(year='1', semester='Fall')
         #for i in range(len(suggested_sequence))[0:]:
         #    print i
 
@@ -28,7 +30,7 @@ def workshop(request):
             #print semester
             #print year
             if semester != None:
-                sem = semester.lower()
+                sem = semester
                 suggested_sequence = Sequence.objects.exclude(cid__in=finish_exclude).order_by('year', 'semester', 'cid').filter(year='1', semester=sem)
         else:
             semester = None
@@ -37,22 +39,24 @@ def workshop(request):
         # Get constraints
         if request.POST.get('constraints'):
             added, dayofweek, courses, location = constraints(request)
-            added2 = Sequence.objects.filter(cid__in=added).filter(semester='winter', year='1')
+            added2 = Sequence.objects.filter(cid__in=added).filter(semester='Winter', year='1')
             solutions2 = solve(request, 0, added2, classes)
-            semester = 'winter'
+            semester = 'Winter'
             year = '2016'
             #return solve(request, 0, added2, classes)
             for i in solutions2:
-                print i
+                #print i
+                a=1
             suggested_sequence2 = Courses.objects.filter(id__in=solutions2)
             for i in suggested_sequence2:
-                print i
-                print "%s - %s" % (i.timeslot1.starthour, i.timeslot1.endhour)
-            #for j in suggested_sequence2:
-            #    Registered.create(studentID, j.cid.cid, j.sid, semester, year, j.type, '', False )
+                a=1
+                #print i
+                #print "%s - %s" % (i.timeslot1.starthour, i.timeslot1.endhour)
+            for j in suggested_sequence2:
+                Registered.create(studentID, j.cid.cid, j.sid, semester, year, j.type, '##', False )
             request.session['year'] = '2016'
-            request.session['semester'] = 'winter'
-            return render(request, 'schedule/schedule.html', context_instance = RequestContext(request, {'json_courses_registered': serializers.serialize('json', suggested_sequence2, use_natural_foreign_keys = True),}))
+            request.session['semester'] = 'Winter'
+            return redirect('schedule')
 
         return render(
             request,
@@ -107,7 +111,7 @@ def semester_select(request):
 
 def solve(request, course, suggested_sequence, classes):
     #print "just recursed"
-    print "course = %d, size = %d" % (course, len(suggested_sequence))
+    #print "course = %d, size = %d" % (course, len(suggested_sequence))
     endlock = 0
     #solutions = []
     if course == len(suggested_sequence):
@@ -117,7 +121,8 @@ def solve(request, course, suggested_sequence, classes):
         endlock = 1
         #suggested_sequence = Courses.objects.filter(id__in=solutions)
         for i in solutions:
-            print i
+            #print i
+            a=1
         #suggested_sequence2 = Courses.objects.filter(id__in=solutions)
         #return render(request, 'schedule/schedule.html', context_instance = RequestContext(request, {'json_courses_registered': serializers.serialize('json', suggested_sequence2, use_natural_foreign_keys = True),}))
         return solutions
@@ -149,14 +154,14 @@ def solve(request, course, suggested_sequence, classes):
                                         classes.append(cc.id)
                                         classes.append(tutorial[k].id)
                                         classes.append(lab[l].id)
-                                        print "%s: %s - %s - %s section appended" % (cc.cid.cid, cc.sid, tutorial[k].sid, lab[l].sid)
+                                        #print "%s: %s - %s - %s section appended" % (cc.cid.cid, cc.sid, tutorial[k].sid, lab[l].sid)
                                         solve(request, course+1, suggested_sequence, classes)
                                         if endlock == 1:
                                             return solutions
-                                        classes.remove(cc.id)
-                                        classes.remove(tutorial[k].id)
-                                        classes.remove(lab[l].id)
-                                        print "%s: %s - %s - %s section removed" % (cc.cid.cid, cc.sid, tutorial[k].sid, lab[l].sid)
+                                        #classes.remove(cc.id)
+                                        #classes.remove(tutorial[k].id)
+                                        #classes.remove(lab[l].id)
+                                        #print "%s: %s - %s - %s section removed" % (cc.cid.cid, cc.sid, tutorial[k].sid, lab[l].sid)
                 else:
                     for k in range(len(tutorial)):
                         #if course >= 0:
@@ -168,27 +173,27 @@ def solve(request, course, suggested_sequence, classes):
                                 #print "Lec = %s, Tut = %s" % (cc, tutorial[k])
                                 classes.append(cc.id)
                                 classes.append(tutorial[k].id)
-                                print "%s: %s - %s section appended" % (cc.cid.cid, cc.sid, tutorial[k].sid)
+                                #print "%s: %s - %s section appended" % (cc.cid.cid, cc.sid, tutorial[k].sid)
                                 solve(request, course+1, suggested_sequence, classes)
                                 if endlock == 1:
                                     return solutions
-                                classes.remove(cc.id)
-                                classes.remove(tutorial[k].id)
-                                print "%s: %s - %s section removed" % (cc.cid.cid, cc.sid, tutorial[k].sid)
+                                #classes.remove(cc.id)
+                                #classes.remove(tutorial[k].id)
+                                #print "%s: %s - %s section removed" % (cc.cid.cid, cc.sid, tutorial[k].sid)
             else:
                 #if course >= 0:
                 if isAvail(cc.id, classes):
                     #print "Lecture is available"
                     #print "Lec = %s" % (cc)
                     classes.append(cc.id)
-                    print "%s - %s section appended" % (cc.cid.cid, cc.sid)
+                    #print "%s - %s section appended" % (cc.cid.cid, cc.sid)
                     #print cc.cid
                     solve(request, course+1, suggested_sequence, classes)
                     if endlock == 1:
                         return solutions
-                    classes.remove(cc.id)
-                    print "%s - %s section removed" % (cc.cid.cid, cc.sid)
-        print "classes"
+                    #classes.remove(cc.id)
+                    #print "%s - %s section removed" % (cc.cid.cid, cc.sid)
+        #print "classes"
         return solutions
         #suggested_sequence = Courses.objects.filter(id__in=solutions)
         #return render(request, 'schedule/schedule.html', context_instance = RequestContext(request, {'json_courses_registered': serializers.serialize('json',suggested_sequence, use_natural_foreign_keys = True),}))

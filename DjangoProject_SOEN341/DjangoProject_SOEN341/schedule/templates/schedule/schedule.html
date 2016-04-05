@@ -29,15 +29,15 @@
                 if (start_hour.startsWith('0')) {start_hour = start_hour[1];}
                 if (start_hour.startsWith('no')) {start_hour = '12';}
                 start = $(schedule_table).find("tr th:contains('" + start_hour + ":00" +"')").parent();
-
+   
                 start_minutes = timeslots[t][1].substring(3,5);
                 if (start_minutes.startsWith('n')) {start_minutes = '00';}
-                    for (j = 0; j < parseInt(start_minutes)/15; j++) {
+                    for (j = 0; j < parseInt(start_minutes)/15; j++) {            
                         start = start.next();
-                    }
+                    }            
                     $(start).find('td')[day].style.backgroundColor = colors[i];
                     $(start).find('td')[day].style.borderBottom = "1px solid "+colors[i];
-
+                
                     end_hour = timeslots[t][2].substring(0,2);
                     if (end_hour.startsWith('0')) {end_hour = end_hour[1];};
                     if (end_hour.startsWith('no')) {end_hour = '12';}
@@ -46,9 +46,9 @@
                     end = end.prev();
                     end_minutes = timeslots[t][2].substring(3,5);
                     if (end_minutes.startsWith('n')) {end_minutes = '00';}
-                    for (j = 1; j <= parseInt(end_minutes)/15; j++) {
+                    for (j = 1; j <= parseInt(end_minutes)/15; j++) {            
                             end = end.next();
-                        }
+                        }            
                         $(end).find('td')[day].style.backgroundColor = colors[i];
                     }
                     m = 0;
@@ -58,7 +58,7 @@
                         $(end).find('td')[day].style.backgroundColor = colors[i];
                         $(end).find('td')[day].style.borderBottom = "1px solid "+colors[i];
                     } while (!end.is(start));
-
+                
                     center = start;
                     for (k = 0; k < m /2; k++) {
                     center = center.next();
@@ -67,7 +67,7 @@
                     $(center).find('td')[day].innerHTML =  courses[i].fields.lecturer + ' (' +courses[i].fields.room + ', ' + courses[i].fields.sid + ')';
                     $(center).next().find('td')[day].innerHTML = start_hour + ':' + start_minutes + ' - ' + end_hour + ':' + end_minutes;
                 }
-            }
+            }            
         }
     };
 
@@ -89,12 +89,12 @@
 
         for (i = 0; i < tut_radios.length; i++ ){
             tut_radios[i].disabled = false;
-        }
+        }    
 
         lab_radios = $('input[type=radio][name="lab"][value^="' + first_char_from_section + '"]');
         for (i = 0; i < lab_radios.length; i++ ){
             lab_radios[i].disabled = false;
-        }
+        } 
     };
 
     function convert_day(num) {
@@ -130,8 +130,8 @@
     };
 </script>
 
-{% if chosen_semester and chosen_year %}
-    <h1> {{ chosen_semester }}, {{ chosen_year }}</h1>
+{% if chosen_semester and chosen_year %}    
+    <h1> {{ chosen_semester }}, {{ chosen_year }}</h1>   
 {% else %}
     <h2>Please choose a semester...</h2>
 {% endif %}
@@ -203,7 +203,7 @@
                       <div class="panel-body">{{ potential_course.description }}<br />Capacity: {{potential_course.capacity}}</div>
                     </div>
                   </div>
-                {% endfor %}
+                {% endfor %}    
             </div>
         </form>
         {% else %}
@@ -225,10 +225,10 @@
          <h4>Add course manually{% if lectures %} ({{lectures.0.cid.cid}}) {% endif %}</h4><hr />
          <form method="post">
           {% csrf_token %}
-
+             
              <div class="container  well well-sm pre-scrollable">
 
-            {% if lectures %}
+            {% if lectures %}            
                 <table class="table" style="float: left; width:30%">
                     <thead>
                         <tr><th>Lectures</th></tr>
@@ -237,12 +237,12 @@
                     <tbody>
                         {% for lec in lectures %}
                         <tr><td><span class="pull-left"><input type="radio" name="{{lec.type}}" value="{{lec.sid}}"></span><strong>{{ lec.sid }}</strong>{% if lec.lecturer %}<br />Prof: {{lec.lecturer}}{% endif %}{% if lec.timeslot1.day %}<br /><script>document.write(convert_day({{lec.timeslot1.day}}))</script> {{lec.timeslot1.starthour}} - {{lec.timeslot1.endhour}}{% endif %} {% if lec.timeslot2.day %}<br /><script>document.write(convert_day({{ lec.timeslot2.day}}))</script> {{lec.timeslot2.starthour}} - {{lec.timeslot2.endhour}}{% endif %}</td></tr>
-                        {% endfor %}
+                        {% endfor %}   
                     </tbody>
                 </table>
             {% endif %}
 
-            {% if tutorials %}
+            {% if tutorials %}            
                 <table class="table" style="float: left; width:30%">
                     <thead>
                         <tr><th>Tutorials</th></tr>
@@ -251,12 +251,12 @@
                     <tbody>
                         {% for tut in tutorials %}
                         <tr><td><span class="pull-left"><input type="radio" name="{{tut.type}}" value="{{tut.sid}}" disabled></span><strong>{{ tut.sid }}</strong><br />{% if tut.timeslot1.day %}<script>document.write(convert_day({{tut.timeslot1.day}}))</script> {{tut.timeslot1.starthour}} - {{tut.timeslot1.endhour}}{% endif %} {% if tut.timeslot2.day %}<br /><script>document.write(convert_day({{tut.timeslot2.day}}))</script> {{tut.timeslot2.starthour}} - {{tut.timeslot2.endhour}}{% endif %}</td></tr>
-                        {% endfor %}
+                        {% endfor %}   
                     </tbody>
-                </table>
+                </table>    
             {% endif %}
 
-            {% if labs %}
+            {% if labs %}            
                 <table class="table" style="float: left; width:30%">
                     <thead>
                         <tr><th>Labs</th></tr>
@@ -265,17 +265,17 @@
                     <tbody>
                         {% for lab in labs %}
                         <tr><td><span class="pull-left"><input type="radio" name="{{lab.type}}" value="{{lab.sid}}" disabled></span><strong>{{ lab.sid }}</strong><br />{% if lab.timeslot1.day %}<script>document.write(convert_day({{lab.timeslot1.day}}))</script> {{lab.timeslot1.starthour}} - {{lab.timeslot1.endhour}}{% endif %} {% if lab.timeslot2.day %}<script>document.write(convert_day({{lab.timeslot2.day}}))</script> {{lab.timeslot2.starthour}} - {{lab.timeslot2.endhour}}{% endif %}</td></tr>
-                        {% endfor %}
+                        {% endfor %}   
                     </tbody>
-                </table>
+                </table>    
             {% else %}
             {% endif %}
 
             </div>
-
+                  
          <button type="button" class="btn btn-danger btn-xs" onclick="add_course_overlay()">Cancel</button>
-         <button type="submit" class="btn btn-success btn-xs" name="register_combo" value="{{lectures.0.cid.cid}}" onclick="">Submit</button>
-         </form>
+         <button type="submit" class="btn btn-success btn-xs" name="register_combo" value="{{lectures.0.cid.cid}}" onclick="">Submit</button>             
+         </form>  
      </div>
 </div>
 
