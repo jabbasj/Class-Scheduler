@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="2" guice-stage="DEVELOPMENT" name="Failed suite [Minimum Acceptance Test]" parallel="tests">
+  <parameter name="usersSet" value="exsa.txt"/>
+  <parameter name="browser" value="firefox_windows"/>
+  <test name="T_02_Windows(failed)" parallel="tests">
+    <parameter name="usersSet" value="exsa.txt"/>
+    <parameter name="browser" value="firefox_windows"/>
+    <classes>
+      <class name="Main">
+        <methods>
+          <include name="invalidPassword"/>
+          <include name="setUp"/>
+          <include name="invalidUsername"/>
+          <include name="emptyPasswordUsername"/>
+        </methods>
+      </class> <!-- Main -->
+    </classes>
+  </test> <!-- T_02_Windows(failed) -->
+</suite> <!-- Failed suite [Minimum Acceptance Test] -->

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" total="3" passed="3">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Unit Test" duration-ms="30074" started-at="2016-04-07T05:52:49Z" finished-at="2016-04-07T05:53:19Z">
+    <groups>
+    </groups>
+    <test name="Log in test - invalid partition" duration-ms="30074" started-at="2016-04-07T05:52:49Z" finished-at="2016-04-07T05:53:19Z">
+      <class name="profileTest">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:profileTest@5f150435]" name="setUp" is-config="true" duration-ms="4313" started-at="2016-04-07T01:52:49Z" finished-at="2016-04-07T01:52:53Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="invalidNewPassword()[pri:0, instance:profileTest@5f150435]" name="invalidNewPassword" duration-ms="5898" started-at="2016-04-07T01:52:53Z" finished-at="2016-04-07T01:52:59Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- invalidNewPassword -->
+        <test-method status="PASS" signature="setUp()[pri:0, instance:profileTest@5f150435]" name="setUp" is-config="true" duration-ms="3586" started-at="2016-04-07T01:52:59Z" finished-at="2016-04-07T01:53:03Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="invalidOldPassword()[pri:0, instance:profileTest@5f150435]" name="invalidOldPassword" duration-ms="6066" started-at="2016-04-07T01:53:03Z" finished-at="2016-04-07T01:53:09Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- invalidOldPassword -->
+        <test-method status="PASS" signature="setUp()[pri:0, instance:profileTest@5f150435]" name="setUp" is-config="true" duration-ms="3777" started-at="2016-04-07T01:53:09Z" finished-at="2016-04-07T01:53:13Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="invalidRepeatedPassword()[pri:0, instance:profileTest@5f150435]" name="invalidRepeatedPassword" duration-ms="6031" started-at="2016-04-07T01:53:13Z" finished-at="2016-04-07T01:53:19Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- invalidRepeatedPassword -->
+        <test-method status="PASS" signature="tearDown()[pri:0, instance:profileTest@5f150435]" name="tearDown" is-config="true" duration-ms="390" started-at="2016-04-07T01:53:19Z" finished-at="2016-04-07T01:53:19Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- profileTest -->
+    </test> <!-- Log in test - invalid partition -->
+  </suite> <!-- Unit Test -->
+</testng-results>

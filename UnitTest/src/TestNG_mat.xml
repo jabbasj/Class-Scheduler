@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Unit Test" parallel="tests" thread-count="2">
+
+
+<test name="Log in test - invalid partition">
+    <classes>
+    <parameter name="browser" value="firefox_windows"/>
+        <class name="loginTest" ></class>
+    </classes>
+    
+     <classes>
+        <class name="profileTest" ></class>
+    </classes>
+</test>
+
+</suite>
+
