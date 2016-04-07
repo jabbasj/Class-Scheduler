@@ -67,10 +67,10 @@ public class loginTest{
 	}
 	
 	// Take a screen shot if the test fails
-//	@AfterMethod 
-//	public void takeScreenShot(ITestResult result) { 
-//		Utility.takeScreenShotOnFailure(result);
-//	} 
+	@AfterMethod 
+	public void takeScreenShot(ITestResult result) { 
+		Utility.takeScreenShotOnFailure(result);
+	} 
 
 	// Close driver
 	@AfterClass 

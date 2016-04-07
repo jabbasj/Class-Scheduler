@@ -3,14 +3,23 @@
 
 
 <test name="Log in test - invalid partition">
+ 
+     <parameter name="browser" value="firefox_windows"/>
+         
     <classes>
-    <parameter name="browser" value="firefox_windows"/>
+        <class name="logoutTest" ></class>
+    </classes>
+
+<!--    
+	<classes>
         <class name="loginTest" ></class>
     </classes>
     
      <classes>
         <class name="profileTest" ></class>
     </classes>
+-->
+
 </test>
 
 </suite>
