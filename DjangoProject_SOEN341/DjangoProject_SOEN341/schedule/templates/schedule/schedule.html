@@ -184,6 +184,19 @@
              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
              <strong>Error!</strong> Course(s) not registered because of time conflict, max credits or invalid selection!
         </div>
+        
+    {% elif course_dropped == True %}
+        
+        <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Success!</strong> Course dropped!
+        </div>
+        
+    {% elif course_dropped == False %}
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Error!</strong> You are registered to a course that requires the course you are attempting to drop. Drop it first.
+        </div>
 
     {% endif %}
 
@@ -869,6 +882,32 @@
                 </tr>
             </table>
         </div>
+        
+
+<div id="display_courses">
+    {% if lectures_registered %}
+    <form method="post">{% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Section</th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lecture in lectures_registered %}
+                <tr>
+                    <td>{{ lecture.cid }}</td>
+                    <td>{{ lecture.sid }}</td>
+                    <td><button type="submit" class="btn btn-danger btn-md" name="drop_course" value="{{lecture.cid}}">Drop</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </form>
+    {% endif %}
+</div>
 
 {% else %}
     <div class="alert alert-danger">
