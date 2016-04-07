@@ -37,12 +37,18 @@
           <button type="submit" class="btn btn-success btn-md" name="view">View</button>
       </form>
   </div>
-  {% if semester %}
+  {% if error %}
+  <div class="alert alert-danger">
+       <a href="login" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+       <strong>Error!</strong> {{ error }}
+  </div>
+  {% else %}
+  {% if chosen_semester %}
       <form action="/workshop/" role="form" method="POST" id="constraints">
         {% csrf_token %}
-          <p>Suggested sequence for {{ semester }} {{ year }}:</p>
+          <p>Suggested sequence for {{ chosen_semester }} {{ chosen_year }}:</p>
           {% for course in suggested_sequence %}
-          <p><input type="checkbox" name="add" value="{{ course.cid }}" checked> {{ course.cid }}<p>
+          <p><input type="checkbox" name="add" value="{{ course.cid }}"> {{ course.cid }}<p>
           {% endfor %}
           <p>Days of Week:
           <input type="checkbox" name="day" value="1" checked> Monday
@@ -54,26 +60,13 @@
           <input type="checkbox" name="classes" value="morning" checked> Morning Classes
           <input type="checkbox" name="classes" value="afternoon" checked> Afternoon Classes
           <input type="checkbox" name="classes" value="evening" checked> Evening Classes
-          <input type="checkbox" name="classes" value="summer" checked> Summer Classes
-          <input type="checkbox" name="classes" value="split" checked> Split Lectures</p>
-          <p>Location:
-          <input type="checkbox" name="location" value="sgw" checked> Sir George Williams (Downtown)
-          <input type="checkbox" name="location" value="online"> Online</p>
+          <input type="checkbox" name="classes" value="summer" checked> Summer Classes</p>
           <button type="submit" class="btn btn-default" form="constraints" name="constraints" value="constraints">Generate</button>
       </form>
   {% else %}
   {% endif %}
   {% endif %}
-
-    {% if prerequisites %}
-    <p>Prerequisites:</p>
-
-        {% for prereq in prerequisites %}
-            <li>{{ prereq.pid }} , {{ prereq.rid }}</li>
-        {% endfor %}
-
-    {% else %}
-    {% endif %}
+  {% endif %}
 
 {% else %}
     <div class="alert alert-danger">
