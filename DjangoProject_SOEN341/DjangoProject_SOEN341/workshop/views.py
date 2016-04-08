@@ -123,8 +123,6 @@ def semester_select(request):
     return chosen_semester, chosen_year
 
 def solve(request, course, suggested_sequence, classes, dow, tc, solutions):
-    print classes
-    print solutions
     if course == suggested_sequence.count():
         solutions.extend(classes)
         return solutions
