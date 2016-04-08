@@ -18,6 +18,7 @@ def workshop(request):
     if (request.user.is_authenticated()):
         solutions = []
         classes = []
+        error = None
         studentID = Students.objects.get(email=request.user)
         finished = Registered.objects.filter(finished=1, studentid=studentID)
         registered = Registered.objects.filter(finished=0, studentid=studentID)
@@ -29,12 +30,13 @@ def workshop(request):
         listofreq = excludePrereq(request, studentID)
         combined.extend(listofreq)
         suggested_sequence = Sequence.objects.exclude(cid__in=combined).filter(year='0', semester='fall')
-
         # Get semester and year
         if request.method == 'POST':
             chosen_semester, chosen_year = semester_select(request)
-            if chosen_semester != None:
+            if chosen_semester != None and chosen_year != None:
                 suggested_sequence = Sequence.objects.exclude(cid__in=combined).order_by('year', 'cid')
+            else:
+                error = 'Please select both a semester and a year.'
         else:
             chosen_semester = None
             chosen_year = None
@@ -51,7 +53,7 @@ def workshop(request):
             added, dayofweek, typeclass = constraints(request)
             if not added:
                 error = 'No courses were selected. Please select one or more courses.'
-                return render(request, 'workshop/workshop.html', context_instance = RequestContext(request,{'title':'Workshop', 'error': error, 'year':datetime.now().year,}))
+                #return render(request, 'workshop/workshop.html', context_instance = RequestContext(request,{'title':'Workshop', 'error': error, 'year':datetime.now().year,}))
             added2 = Sequence.objects.filter(cid__in=added)
             solutions2 = solve(request, 0, added2, classes, dayofweek, typeclass, solutions)
             if not solutions2:
@@ -59,19 +61,6 @@ def workshop(request):
                     error = 'No possible combinations due to conflicts from previously registered courses. Please unregister and try again!'
                 else:
                     error = 'No possible schedule combinations could be generated. Please include less constraints and try again!'
-                return render(
-                    request,
-                    'workshop/workshop.html',
-                    context_instance = RequestContext(request,
-                    {
-                        'title':'Workshop',
-                        'chosen_semester': chosen_semester,
-                        'chosen_year': chosen_year,
-                        'error': error,
-                        'message':'Your workshop page.',
-                        'year':datetime.now().year,
-                    })
-                )
             else:
                 suggested_sequence2 = Courses.objects.filter(id__in=solutions2)
                 del solutions
@@ -90,6 +79,7 @@ def workshop(request):
                 'suggested_sequence': suggested_sequence,
                 'chosen_semester': chosen_semester,
                 'chosen_year': chosen_year,
+                'error': error,
                 'message':'Your workshop page.',
                 'year':datetime.now().year,
             })
@@ -148,9 +138,6 @@ def solve(request, course, suggested_sequence, classes, dow, tc, solutions):
                                         classes.remove(cc.id)
                                         classes.remove(tutorial[k].id)
                                         classes.remove(lab[l].id)
-                                        #if solutions:
-                                        #    return solutions
-                                        #    break
                 else:
                     for k in range(tutorial.count()):
                         if isAvail(tutorial[k].id, classes, dow, tc):
@@ -180,22 +167,22 @@ def isAvail(course, classes, dow, tc):
         if cc.timeslot1.day == assigned.timeslot1.day or cc.timeslot1.day == assigned.timeslot2.day:
             if cc.timeslot1.starthour == assigned.timeslot1.starthour or cc.timeslot1.endhour == assigned.timeslot1.endhour:
                 return False
-            elif assigned.timeslot1.starthour <= cc.timeslot1.starthour and cc.timeslot1.starthour <= assigned.timeslot1.endhour:
+            elif assigned.timeslot1.starthour <= cc.timeslot1.starthour <= assigned.timeslot1.endhour:
                 return False
-            elif assigned.timeslot2.starthour <= cc.timeslot1.starthour and cc.timeslot1.starthour <= assigned.timeslot2.endhour:
+            elif assigned.timeslot2.starthour <= cc.timeslot1.starthour <= assigned.timeslot2.endhour:
                 return False
-            elif assigned.timeslot1.starthour <= cc.timeslot2.starthour and cc.timeslot2.starthour <= assigned.timeslot1.endhour:
+            elif assigned.timeslot1.starthour <= cc.timeslot2.starthour <= assigned.timeslot1.endhour:
                 return False
-            elif assigned.timeslot2.starthour <= cc.timeslot2.starthour and cc.timeslot2.starthour <= assigned.timeslot2.endhour:
+            elif assigned.timeslot2.starthour <= cc.timeslot2.starthour <= assigned.timeslot2.endhour:
                 return False
 
-            elif assigned.timeslot1.starthour <= cc.timeslot1.endhour and cc.timeslot1.endhour <= assigned.timeslot1.endhour:
+            elif assigned.timeslot1.starthour <= cc.timeslot1.endhour <= assigned.timeslot1.endhour:
                 return False
-            elif assigned.timeslot2.starthour <= cc.timeslot1.endhour and cc.timeslot1.endhour <= assigned.timeslot2.endhour:
+            elif assigned.timeslot2.starthour <= cc.timeslot1.endhour <= assigned.timeslot2.endhour:
                 return False
-            elif assigned.timeslot1.starthour <= cc.timeslot2.endhour and cc.timeslot2.endhour <= assigned.timeslot1.endhour:
+            elif assigned.timeslot1.starthour <= cc.timeslot2.endhour <= assigned.timeslot1.endhour:
                 return False
-            elif assigned.timeslot2.starthour <= cc.timeslot2.endhour and cc.timeslot2.endhour <= assigned.timeslot2.endhour:
+            elif assigned.timeslot2.starthour <= cc.timeslot2.endhour <= assigned.timeslot2.endhour:
                 return False
     if checkDay(course, dow) and checkType(course, tc):
         return True

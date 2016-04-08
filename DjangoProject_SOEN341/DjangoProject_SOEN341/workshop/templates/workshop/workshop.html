@@ -42,7 +42,7 @@
        <strong>Error!</strong> {{ error }}
   </div>
   {% else %}
-  {% if chosen_semester %}
+  {% if chosen_semester and chosen_year %}
       <form action="/workshop/" role="form" method="POST" id="constraints">
         {% csrf_token %}
           <p>Suggested sequence for {{ chosen_semester }} {{ chosen_year }}:</p>
