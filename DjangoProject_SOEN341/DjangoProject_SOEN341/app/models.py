@@ -121,7 +121,7 @@ class Sequence(models.Model):
     cid = models.CharField(db_column='cId', primary_key=True, max_length=8)  # Field name made lowercase.
     semester = models.CharField(max_length=6)
     year = models.IntegerField()
-    
+
     objects = models.Manager()
 
     def __str__(self):
@@ -150,4 +150,3 @@ class AuthUser(models.Model):
     class Meta:
         managed = False
         db_table = 'auth_user'
-
