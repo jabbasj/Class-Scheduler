@@ -9,13 +9,14 @@ from app.models import Students, Sequence, Registered, Courses, Prerequisites, T
 
 from datetime import time
 
-solutions = []
+#solutions = []
 solution2 = []
 
 def workshop(request):
     """Renders the workshop page."""
     assert isinstance(request, HttpRequest)
     if (request.user.is_authenticated()):
+        solutions = []
         classes = []
         studentID = Students.objects.get(email=request.user)
         finished = Registered.objects.filter(finished=1, studentid=studentID)
@@ -52,7 +53,7 @@ def workshop(request):
                 error = 'No courses were selected. Please select one or more courses.'
                 return render(request, 'workshop/workshop.html', context_instance = RequestContext(request,{'title':'Workshop', 'error': error, 'year':datetime.now().year,}))
             added2 = Sequence.objects.filter(cid__in=added)
-            solutions2 = solve(request, 0, added2, classes, dayofweek, typeclass)
+            solutions2 = solve(request, 0, added2, classes, dayofweek, typeclass, solutions)
             if not solutions2:
                 if classes2:
                     error = 'No possible combinations due to conflicts from previously registered courses. Please unregister and try again!'
@@ -73,6 +74,7 @@ def workshop(request):
                 )
             else:
                 suggested_sequence2 = Courses.objects.filter(id__in=solutions2)
+                del solutions
                 del solutions2
                 for j in suggested_sequence2:
                     Registered.create(studentID, j.cid.cid, j.sid, chosen_semester, chosen_year, j.type, '', False )
@@ -120,9 +122,10 @@ def semester_select(request):
         request.session['semester'] = chosen_semester
     return chosen_semester, chosen_year
 
-def solve(request, course, suggested_sequence, classes, dow, tc):
+def solve(request, course, suggested_sequence, classes, dow, tc, solutions):
+    print classes
+    print solutions
     if course == suggested_sequence.count():
-        del solutions[:]
         solutions.extend(classes)
         return solutions
     else:
@@ -141,7 +144,7 @@ def solve(request, course, suggested_sequence, classes, dow, tc):
                                         classes.append(cc.id)
                                         classes.append(tutorial[k].id)
                                         classes.append(lab[l].id)
-                                        solve(request, course+1, suggested_sequence, classes, dow, tc)
+                                        solve(request, course+1, suggested_sequence, classes, dow, tc, solutions)
                                         if solutions:
                                             break
                                         classes.remove(cc.id)
@@ -156,7 +159,7 @@ def solve(request, course, suggested_sequence, classes, dow, tc):
                             if isAvail(cc.id, classes, dow, tc):
                                 classes.append(cc.id)
                                 classes.append(tutorial[k].id)
-                                solve(request, course+1, suggested_sequence, classes, dow, tc)
+                                solve(request, course+1, suggested_sequence, classes, dow, tc, solutions)
                                 if solutions:
                                     break
                                 classes.remove(cc.id)
@@ -164,7 +167,7 @@ def solve(request, course, suggested_sequence, classes, dow, tc):
             else:
                 if isAvail(cc.id, classes, dow, tc):
                     classes.append(cc.id)
-                    solve(request, course+1, suggested_sequence, classes, dow, tc)
+                    solve(request, course+1, suggested_sequence, classes, dow, tc, solutions)
                     if solutions:
                         break
                     classes.remove(cc.id)

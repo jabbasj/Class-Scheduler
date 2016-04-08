@@ -10,7 +10,6 @@
 
 <h2>{{ title }}</h2>
 
-  {% if suggested_sequence %}
   <div>
       <form action="/workshop/" role="form" method="POST" id="semester">
       {% csrf_token %}
@@ -64,7 +63,6 @@
           <button type="submit" class="btn btn-default" form="constraints" name="constraints" value="constraints">Generate</button>
       </form>
   {% else %}
-  {% endif %}
   {% endif %}
   {% endif %}
 
