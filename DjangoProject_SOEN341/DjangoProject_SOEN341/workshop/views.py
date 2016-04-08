@@ -15,7 +15,7 @@ solution2 = []
 def workshop(request):
     """Renders the workshop page."""
     assert isinstance(request, HttpRequest)
-    if (request.user.is_authenticated()):
+    if request.user.is_authenticated() and not request.user.is_staff:
         solutions = []
         classes = []
         error = None
@@ -114,6 +114,7 @@ def semester_select(request):
 
 def solve(request, course, suggested_sequence, classes, dow, tc, solutions):
     if course == suggested_sequence.count():
+        #del solutions[:]
         solutions.extend(classes)
         return solutions
     else:
@@ -157,6 +158,7 @@ def solve(request, course, suggested_sequence, classes, dow, tc, solutions):
                         break
                     classes.remove(cc.id)
         return solutions
+    #return solutions
 
 def isAvail(course, classes, dow, tc):
     cc = Courses.objects.get(id=course)
