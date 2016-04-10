@@ -40,6 +40,8 @@ def post_handler(request):
     new_registries = []
     potential_courses_success = None
     combo_registered_success = None
+    unregister_combo = None
+    course_dropped = None
 
     lectures = []
     tutorials = []
@@ -72,9 +74,13 @@ def post_handler(request):
                 potential_courses_success = True
             else:
                 potential_courses_success = False
-       
+      
+    if 'drop_course' in request.POST.keys():
+        course_dropped = drop_check(request) 
         
     chosen_semester, chosen_year, courses_registered = get_registered_courses(request)
+    
+    lectures_registered = get_registered_lectures(request)
         
     return render(
         request,
@@ -93,6 +99,9 @@ def post_handler(request):
             'json_courses_registered': json_serialize(courses_registered),
             'potential_courses' : potential_courses,
             'potential_courses_success': potential_courses_success,
+            'courses_registered': courses_registered,
+            'lectures_registered': lectures_registered,
+            'course_dropped': course_dropped,
             'combo_registered_success': combo_registered_success,
             'conflicts': conflicts,
             'new_registries': new_registries,
@@ -322,7 +331,7 @@ def get_registered_courses(request):
         
     try:            
         student = Students.objects.get(email=request.user)            
-        registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=int(chosen_year), finished = False)
+        registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False)
             
         for reg in registered:                
             courses_registered.append(Courses.objects.get(cid=reg.cid, sid=reg.sectionid, type=reg.type)) #semester=chosen_semester, year=chosen_year
@@ -337,6 +346,123 @@ def get_registered_courses(request):
 def search(request):
     return get_sections_available_to_student(request)
 
+# fetches all the lectures currently registered for a specified semester
+def get_registered_lectures(request):
+    chosen_semester = None
+    chosen_year = None
+    student = None
+    lectures_registered = []
+    
+
+    if 'view' in request.POST.keys():
+        chosen_semester = request.POST.get('semester')
+        chosen_year = request.POST.get('year')
+        request.session['year'] = chosen_year
+        request.session['semester'] = chosen_semester
+
+    elif 'semester' in request.session and 'year' in request.session: 
+
+        chosen_semester = request.session['semester']            
+        chosen_year = request.session['year']
+        
+    try:            
+        student = Students.objects.get(email=request.user)            
+        lectures = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False, type='lec')
+            
+        for lec in lectures:                
+            lectures_registered.append(Courses.objects.get(cid=lec.cid, sid=lec.sectionid, type=lec.type))
+        
+    except Exception as e:            
+        lectures_registered = []
+
+    return lectures_registered
+    
+# fetches all the registered tuples for the current year and semester
+def get_course_tuples(request, course_id):
+    chosen_semester = None
+    chosen_year = None
+    student = None
+    courseid = course_id
+    registered_tuples = []
+
+    if 'view' in request.POST.keys():
+        chosen_semester = request.POST.get('semester')
+        chosen_year = request.POST.get('year')
+        request.session['year'] = chosen_year
+        request.session['semester'] = chosen_semester
+
+    elif 'semester' in request.session and 'year' in request.session: 
+
+        chosen_semester = request.session['semester']            
+        chosen_year = request.session['year']
+        
+    try:            
+        student = Students.objects.get(email=request.user)            
+        registered = Registered.objects.filter(studentid=student.sid, cid=courseid, semester=chosen_semester, year=chosen_year, finished = False)
+            
+        for reg in registered:
+            registered_tuples.append(Registered.objects.get(studentid=student.sid, cid=reg.cid, sectionid=reg.sectionid, type=reg.type))
+        
+    except Exception as e:            
+        registered_tuples =  []
+
+    return registered_tuples
+    
+# Unregistering from a course
+def drop_check(request):
+    course_dropped = None
+    conflict = None
+    registered_tuples = []
+    forward_registered = []
+    
+    course_id = request.POST.get('drop_course')
+    student_id = Students.objects.get(email=request.user)
+    finished = Registered.objects.filter(studentid = student_id, cid = course_id, type='lec', finished = 1)
+    
+    if finished:
+        course_dropped = None
+    else:
+        #this gets all the types of the registration
+        registered_tuples = get_course_tuples(request, course_id)
+    
+        #this checks if the course is required for another
+        poten_conflict, prereq_list = get_prerequisite(request, course_id)
+    
+        #this checks if the user is registered to a class
+        if poten_conflict:
+            for course in prereq_list:
+                if Registered.objects.filter(studentid= student_id, cid = course.pid):
+                    forward_registered.append(Registered.objects.filter(studentid = student_id, cid = course.pid))
+            if forward_registered:
+                conflict = True
+            else:
+                conflict = False
+    
+        if conflict:
+            course_dropped = False
+        else:
+            course_dropped = True
+            for course in registered_tuples:
+                course.delete()
+            
+    return course_dropped
+        
+            
+#checks for a potential conflict
+def get_prerequisite(request, course_id):
+    poten_conflict = None
+    prereq_list = []
+    
+    req_id = course_id 
+    
+    prereq_list = Prerequisites.objects.filter(rid = req_id)
+
+    if prereq_list:
+        poten_conflict = True
+    else:
+        poten_conflict = False
+    
+    return poten_conflict, prereq_list
 
 # function for fetching lectures, tutorials and labs available to register for chosen semester
 # if type_chosen is specified it looks for specified type
@@ -488,10 +614,10 @@ def remove_prereqs_missing(request, courses):
 
 
 # helper function that evaluates if a course has been finisehd with passing grade
-def check_if_course_passed(request, courseid):
+def check_if_course_passed(request, course):
     try:
-        finished_course = Registered.objects.filter(cid=courseid, studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
-        registered_course = Registered.objects.filter(cid=courseid, studentid = Students.objects.get(email=request.user).sid, finished = False, type = 'lec')
+        finished_course = Registered.objects.filter(cid=course.cid, studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
+        registered_course = Registered.objects.filter(cid=course.cid, studentid = Students.objects.get(email=request.user).sid, finished = False, type = 'lec')
 
         chosen_semester = request.session['semester']       
         chosen_year = int(request.session['year'])
