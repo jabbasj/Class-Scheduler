@@ -331,10 +331,10 @@ def get_registered_courses(request):
         
     try:            
         student = Students.objects.get(email=request.user)            
-        registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False)
+        registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=int(chosen_year), finished = False)
             
         for reg in registered:                
-            courses_registered.append(Courses.objects.get(cid=reg.cid, sid=reg.sectionid, type=reg.type)) #semester=chosen_semester, year=chosen_year
+            courses_registered.append(Courses.objects.get(cid=reg.cid, sid=reg.sectionid, type=reg.type))
         
     except Exception as e:            
         courses_registered = []
@@ -614,10 +614,10 @@ def remove_prereqs_missing(request, courses):
 
 
 # helper function that evaluates if a course has been finisehd with passing grade
-def check_if_course_passed(request, course):
+def check_if_course_passed(request, courseid):
     try:
-        finished_course = Registered.objects.filter(cid=course.cid, studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
-        registered_course = Registered.objects.filter(cid=course.cid, studentid = Students.objects.get(email=request.user).sid, finished = False, type = 'lec')
+        finished_course = Registered.objects.filter(cid=courseid, studentid = Students.objects.get(email=request.user).sid, finished = True, type = 'lec')
+        registered_course = Registered.objects.filter(cid=courseid, studentid = Students.objects.get(email=request.user).sid, finished = False, type = 'lec')
 
         chosen_semester = request.session['semester']       
         chosen_year = int(request.session['year'])
