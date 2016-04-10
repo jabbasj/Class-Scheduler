@@ -154,9 +154,6 @@ def find_courses_within_constraints(request, suggested_sequence, courses_availab
             combo = {'lec':lecture,'tuts': corresponding_tutorials, 'labs': corresponding_labs}
             combos.append(combo)
 
-        if len(unique_lecture_cids) < len(courses_selected):
-            error = "Your constraints filtered out one of your chosen lectures!"
-
         unique_packages_that_fit_current_schedule = split_into_unique_combos(request, combos, unique_lectures)
 
         chosen_combos = unique_packages_that_fit_current_schedule[0]
@@ -177,7 +174,10 @@ def find_courses_within_constraints(request, suggested_sequence, courses_availab
                    success, conflicts, new_registries = check_conflicts_and_register_student_to(request, [lec], [], [])
 
             if len(conflicts) > 0:
-                error += " " + conflicts[0].cid.cid + " caused surpassing 12 credits!"
+                error += " " + conflicts[0].cid.cid + " does not fit with current schedule!"
+
+        if len(chosen_combos) > 0 and len(chosen_combos) < len(courses_selected):
+            error = "Your constraints filtered out one of your chosen lectures!"
 
 
     except Exception as e:
@@ -190,7 +190,7 @@ def find_courses_within_constraints(request, suggested_sequence, courses_availab
         return redirect('schedule')
 
     if len(chosen_combos) == 0 and error == "":
-        error = "Failed to build schedule, courses chosen cannot be fit together with your current schedule."
+        error = "Failed to build schedule, courses chosen cannot be fit together with your current constraints and schedule."
 
     return render(
             request,
