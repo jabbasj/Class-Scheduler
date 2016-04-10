@@ -567,4 +567,3 @@ def json_serialize(courses):
 # set with cache.set('key', 'cache_name')
 def cached_queries(key):
     return {'cache': cache.get(key)}
-
