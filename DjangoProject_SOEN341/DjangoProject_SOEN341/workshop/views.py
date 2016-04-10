@@ -308,6 +308,13 @@ def split_combos_into_unique_section_packages(combos):
                 for j in range(0,lab_index):
                     packages.append({'lec': lec, 'tut': tuts[i], 'lab': labs[j]})
 
+        elif lab_index != 0:
+            for k in range(0, lab_index):
+                packages.append({'lec': lec, 'lab': labs[k]})
+
+        elif tut_index == 0 and lab_index == 0:
+            packages.append({'lec': lec})
+
         unique_section_packages.extend(packages)     
 
     return unique_section_packages
