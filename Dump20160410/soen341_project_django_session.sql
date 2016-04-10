@@ -18,30 +18,29 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `students`
+-- Table structure for table `django_session`
 --
 
-DROP TABLE IF EXISTS `students`;
+DROP TABLE IF EXISTS `django_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `students` (
-  `sId` int(11) NOT NULL,
-  `firstName` varchar(50) NOT NULL,
-  `lastName` varchar(50) NOT NULL,
-  `email` varchar(60) NOT NULL,
-  `password` varchar(30) NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`sId`)
+CREATE TABLE `django_session` (
+  `session_key` varchar(40) NOT NULL,
+  `session_data` longtext NOT NULL,
+  `expire_date` datetime(6) NOT NULL,
+  PRIMARY KEY (`session_key`),
+  KEY `django_session_de54fa62` (`expire_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `students`
+-- Dumping data for table `django_session`
 --
 
-LOCK TABLES `students` WRITE;
-/*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (54353,'new','user','new_user','1234'),(10001011,'Vince','Lasalle','vLasalle@gmail.com','recess'),(10001110,'Gus','Griswald','gGriswald@gmail.com','qwerty'),(10001222,'Mikey','Blumberg','mBlumberg@gmail.com','password1234'),(10001235,'T.J','Detweiler','TJDetweiller@gmail.com','asdfasdf'),(10001343,'Gretchen','Grundler','gGrundler@gmail.com','safetyfirst'),(10002032,'Ashley','Spinelli','flashGordon4Life@gmail.com','flashGordon');
-/*!40000 ALTER TABLE `students` ENABLE KEYS */;
+LOCK TABLES `django_session` WRITE;
+/*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
+INSERT INTO `django_session` VALUES ('3cy8pd61ezqy5xkynfs652boe5lwoqz9','ZTNlMWQyZmQ2N2IxYTdlMzkwNWFjYTg3YmYzYTkyOTFhNTcyNDQ1Nzp7InNlbWVzdGVyIjoiRmFsbCIsInllYXIiOiIyMDE2IiwiX2F1dGhfdXNlcl9oYXNoIjoiOWQwNjMxZmYwMWM0ZWExNTIxMmUyYTg1ZjBiNTg1YTlkYWUxNzkxYyIsIl9hdXRoX3VzZXJfaWQiOiIxMDAwMTAxMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=','2016-04-24 12:24:54.387009'),('fjh86gbb11xq98xq4tg48ctzegubj83w','ZDY1MTc0NDE2NmE1YTliZTJkN2UwOTgwNGM5NjdkNzdjOWNjYzk1Yzp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjEwMDAxMDExIiwiX2F1dGhfdXNlcl9oYXNoIjoiODJjNzJhMjU4ODQ4MGQ4NTM4NDFhMTgzZjZkMjZjOWJlNTgwNTIzZiJ9','2016-03-25 03:07:32.710914');
+/*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-02 15:13:05
+-- Dump completed on 2016-04-10 14:07:51

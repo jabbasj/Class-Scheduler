@@ -38,7 +38,7 @@ CREATE TABLE `django_admin_log` (
   KEY `django_admin_log_user_id_c564eba6_fk_auth_user_id` (`user_id`),
   CONSTRAINT `django_admin__content_type_id_c4bce8eb_fk_django_content_type_id` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`),
   CONSTRAINT `django_admin_log_user_id_c564eba6_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -47,7 +47,7 @@ CREATE TABLE `django_admin_log` (
 
 LOCK TABLES `django_admin_log` WRITE;
 /*!40000 ALTER TABLE `django_admin_log` DISABLE KEYS */;
-INSERT INTO `django_admin_log` VALUES (1,'2016-02-27 20:08:19.211796','10002034','test',1,'Added.',3,10002033),(2,'2016-02-27 20:08:57.272973','10002034','test',2,'Changed first_name, last_name and email.',3,10002033),(3,'2016-03-30 23:00:40.845369','10002035','new_user',1,'Added.',3,10002033),(4,'2016-03-30 23:01:37.662618','54353','Students object',1,'Added.',13,10002033),(5,'2016-04-01 07:40:15.249735','8','10001011 - Lasalle, Vince - vLasalle@gmail.com in COMP 248, U - winter, 2016 - 70',1,'Added.',12,10002033);
+INSERT INTO `django_admin_log` VALUES (1,'2016-02-27 20:08:19.211796','10002034','test',1,'Added.',3,10002033),(2,'2016-02-27 20:08:57.272973','10002034','test',2,'Changed first_name, last_name and email.',3,10002033),(3,'2016-03-30 23:00:40.845369','10002035','new_user',1,'Added.',3,10002033),(4,'2016-03-30 23:01:37.662618','54353','Students object',1,'Added.',13,10002033),(5,'2016-04-01 07:40:15.249735','8','10001011 - Lasalle, Vince - vLasalle@gmail.com in COMP 248, U - winter, 2016 - 70',1,'Added.',12,10002033),(6,'2016-04-05 05:30:20.039799','96','10001011 - Lasalle, Vince - vLasalle@gmail.com in ENGR 361, EC - Winter, 2016 - 78',2,'Changed grade and finished.',12,10002033),(7,'2016-04-05 05:30:25.395106','97','10001011 - Lasalle, Vince - vLasalle@gmail.com in ENGR 361, ECED - Winter, 2016 - 75',2,'Changed grade and finished.',12,10002033),(8,'2016-04-05 05:30:31.007427','96','10001011 - Lasalle, Vince - vLasalle@gmail.com in ENGR 361, EC - Winter, 2016 - 75',2,'Changed grade.',12,10002033);
 /*!40000 ALTER TABLE `django_admin_log` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -60,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-02 15:13:05
+-- Dump completed on 2016-04-10 14:07:50

@@ -2,19 +2,49 @@
 
 {% block content %}
 
-<h2>{{ title }}</h2>
-<h3>{{ message }}</h3>
+{% load staticfiles %}
 
-<p>Use this area to provide additional information.</p>
+<a href="/" class="navbar-brand"><img src="{% static 'app/images/logo.png' %}" class="img-rounded" width="100" id="logo"></img></a>
+<br />
+<br />
+<br />
+<p><h3>SOEN 341/4 S - Team Project</h3><p class="lead">Team C</p>
 
-{% if courses %}
-    <p>Test all courses:</p>
+The project for this semester is:
+<form method="post" style="text-align:right">{% csrf_token %}<button type="submit" class="btn btn-success btn-xs">Download User Manual</button></form>
 
-        {% for course in courses %}
-            <li>{{ course.cid.cid }} , {{ course.semester }}, {{ course.year }}</li>
-        {% endfor %}
+<h4><u>Personal Software Engineering Multi-Year Program planner</u></h4>
 
-    {% else %}
-{% endif %}
+    <br />
+<h4>Description:</h4>
 
+Students in Software Engineering (and in the whole faculty as well) have to take a certain number of courses to complete their program. These courses are organized into a curriculum with a pre-defined prerequisite structure.
+    <br /><br />
+Normally, students register for the two sessions by choosing their courses according to the published schedules assuming, of course, that they have fulfilled all prerequisites for the coming year.  In the academic careers of many students, the schedules of the department may not fit their specific needs.  The reasons for the exceptions may be many:  prerequisite failures due to failed or D grades, Conditional Standing, personal or professional needs for time off or the need for certain free blocks of time during the week. The results of an exception may vary from the need for a summer course to a ripple effect through the remaining years of the four-year program. In some cases, an extra semester or year may be needed.
+    <br /><br />
+The main goal of this project is to design and implement a software package to automate readjustments to the Departmental sequences and optimize the resulting sequences to meet any special needs of the user as for timing of sections..  The software package should offer an attractive graphical interface.
+    <br /><br /><br />
+
+<h4>Details</h4>
+Create a test file of academic records of at least 6 fictional students, 2 for each of the first 3 years of the program.. Each of these students shall have at least two problems requiring readjustment of their schedules.
+    <br />
+Extract a file with all software engineering and computer science course and lab sections offered in the 2015-16 program and its options for all 3 semesters.
+    <br />
+Extract a file giving all the prerequisites for all courses available to Software Engineering students.
+    <br />
+Extract files giving approved courses for basic science and general education.
+
+Access the file in this folder listing all courses that must be taught by an engineer. Note that in the Department schedules all Computer Science course sections listed are taught by engineers.
+
+Your program will establish the set of courses to be taken in all subsequent semesters according to the academic record of the user and any special constraints specified by user (day, evening, number of courses, excluded days or times, etc). The display should respond interactively to changes in the constraints as they are entered.
+    <br /><br />
+The project will require the following deliverables phased throughout the 13 weeks of the semester.<br /><br />
+Team Project Deliverable 0 (System Overview description) 		start of week 2<br />
+Team Project Deliverable 1 (requirements, scope, plan)  		end of week 5<br />
+Team Project Deliverable 2 (architecture and design) 			end of week 9<br />
+Team Project Deliverable 3 (implementation and testing) 		end of week 12<br />
+Team Project Deliverable 4 (complete report integrating all phases of the project) 											end of week 13<br />
+    <br /><br />
+<u>Teams must be 8 to 10 students each.</u>  It is suggested that team members take the roles of Implementer, Tester, and Documenter, and share the role of devising the requirements and the design at all times.  Team members may rotate to different roles for each version, so that by the end of the project you will have performed each role (haha).
+</p>
 {% endblock %}
