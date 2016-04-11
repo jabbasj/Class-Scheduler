@@ -71,8 +71,8 @@
         <div class="container">
               <form action="/workshop/" role="form" method="POST" id="generate">
                 {% csrf_token %}
-                  <br />
-                  <div class="well well-sm pre-scrollable" style="margin-left:45px">
+                  <br /><br /><br /><br /><br /><br /><br />
+                  <div class="well well-sm pre-scrollable" style="margin-left:-30px">
                   <p><u>Available courses</u> for {{ chosen_semester }} {{ chosen_year }}:</p>                  
                   {% for course in courses_available %}
                   <p style="text-indent: 5em;"><input type="checkbox" name="add" value="{{ course.cid }}"> {{ course.cid }}<p>
