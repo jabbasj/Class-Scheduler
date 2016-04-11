@@ -11,4 +11,4 @@ Note:
   
 
   
-  ![Alt text](https://cloud.githubusercontent.com/assets/16614194/14440625/c78a8150-fffe-11e5-9820-294832d03c8a.png"Optional Title")
+  ![ScreenShot](https://cloud.githubusercontent.com/assets/16614194/14440625/c78a8150-fffe-11e5-9820-294832d03c8a.png"Optional Title")
