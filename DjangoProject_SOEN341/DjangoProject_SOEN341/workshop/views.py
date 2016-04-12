@@ -632,6 +632,7 @@ def check_if_course_passed(request, courseid):
             if chosen_year > registered_course[0].year:
                 return True
 
+            #wrong semester sequence logic
             if chosen_year == registered_course[0].year:
                 if chosen_semester != registered_course[0].semester:
                     if chosen_semester == 'Summer' or (chosen_semester == 'Winter' and registered_course[0].semester == 'Fall'):
@@ -666,13 +667,13 @@ def remove_full_courses(request, courses):
     courses_with_capacity = []
 
     chosen_semester = request.session['semester']       
-    chosen_year = int(request.session['year'])
+    chosen_year = request.session['year']
 
     for i in courses:
 
         capacity = 0
 
-        registered_courses = Registered.objects.filter(cid = i.cid, sectionid=i.sid, finished = False, semester=chosen_semester, year=chosen_year, type = i.type)
+        registered_courses = Registered.objects.filter(cid = i.cid, sectionid=i.sid, finished = False, semester=chosen_semester, year=int(chosen_year), type = i.type)
 
         if len(registered_courses) < i.capacity:
             courses_with_capacity.append(i)
@@ -721,7 +722,7 @@ def get_registered_courses(request):
         registered = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=int(chosen_year), finished = False)
             
         for reg in registered:                
-            courses_registered.append(Courses.objects.get(cid=reg.cid, sid=reg.sectionid, type=reg.type)) #semester=chosen_semester, year=chosen_year
+            courses_registered.append(Courses.objects.get(cid=reg.cid, sid=reg.sectionid, type=reg.type)) #semester=chosen_semester, year=int(chosen_year)
         
     except Exception as e:            
         courses_registered = []

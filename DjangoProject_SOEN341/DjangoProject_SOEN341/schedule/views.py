@@ -367,7 +367,7 @@ def get_registered_lectures(request):
         
     try:            
         student = Students.objects.get(email=request.user)            
-        lectures = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=chosen_year, finished = False, type='lec')
+        lectures = Registered.objects.filter(studentid=student.sid, semester=chosen_semester, year=int(chosen_year), finished = False, type='lec')
             
         for lec in lectures:                
             lectures_registered.append(Courses.objects.get(cid=lec.cid, sid=lec.sectionid, type=lec.type))
@@ -398,7 +398,7 @@ def get_course_tuples(request, course_id):
         
     try:            
         student = Students.objects.get(email=request.user)            
-        registered = Registered.objects.filter(studentid=student.sid, cid=courseid, semester=chosen_semester, year=chosen_year, finished = False)
+        registered = Registered.objects.filter(studentid=student.sid, cid=courseid, semester=chosen_semester, year=int(chosen_year), finished = False)
             
         for reg in registered:
             registered_tuples.append(Registered.objects.get(studentid=student.sid, cid=reg.cid, sectionid=reg.sectionid, type=reg.type))
@@ -629,6 +629,7 @@ def check_if_course_passed(request, courseid):
             if chosen_year > registered_course[0].year:
                 return True
 
+            #this semester sequence logic is wrong
             if chosen_year == registered_course[0].year:
                 if chosen_semester != registered_course[0].semester:
                     if chosen_semester == 'Summer' or (chosen_semester == 'Winter' and registered_course[0].semester == 'Fall'):
@@ -663,13 +664,13 @@ def remove_full_courses(request, courses):
     courses_with_capacity = []
 
     chosen_semester = request.session['semester']       
-    chosen_year = int(request.session['year'])
+    chosen_year = request.session['year']
 
     for i in courses:
 
         capacity = 0
 
-        registered_courses = Registered.objects.filter(cid = i.cid, sectionid=i.sid, finished = False, semester=chosen_semester, year=chosen_year, type = i.type)
+        registered_courses = Registered.objects.filter(cid = i.cid, sectionid=i.sid, finished = False, semester=chosen_semester, year=int(chosen_year), type = i.type)
 
         if len(registered_courses) < i.capacity:
             courses_with_capacity.append(i)
