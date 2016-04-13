@@ -152,7 +152,7 @@ def register_lec_tut_lab_combo(request):
     return combo_registered_success, conflicts, new_registries
 
 
-def max_credits_registered(lec, courses_registered, MAX = 12):
+def max_credits_registered(lec, courses_registered, MAX = 17):
     try:
         total_credits_registered = 0
 
@@ -557,7 +557,7 @@ def remove_completed_by_student(request, courses):
     if (courses != None):
         try:
             for i in courses:
-                if check_if_course_passed(request, i) == False:
+                if check_if_course_passed(request, i.cid.cid) == False:
                     not_completed_yet.append(i)
 
         except Exception as e:
@@ -632,7 +632,7 @@ def check_if_course_passed(request, courseid):
             #this semester sequence logic is wrong
             if chosen_year == registered_course[0].year:
                 if chosen_semester != registered_course[0].semester:
-                    if chosen_semester == 'Summer' or (chosen_semester == 'Winter' and registered_course[0].semester == 'Fall'):
+                    if chosen_semester == 'Fall' or (chosen_semester == 'Summer' and registered_course[0].semester == 'Winter'):
                         return True
 
 
@@ -677,7 +677,7 @@ def remove_full_courses(request, courses):
 
     return courses_with_capacity
 
-# returns cids from given courses
+# returns cids from given registered objects
 def get_cids(courses):
     cids_list = []
     for i in courses:

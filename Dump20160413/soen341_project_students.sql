@@ -18,36 +18,30 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `registered`
+-- Table structure for table `students`
 --
 
-DROP TABLE IF EXISTS `registered`;
+DROP TABLE IF EXISTS `students`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `registered` (
-  `studentId` int(11) NOT NULL,
-  `cId` varchar(8) NOT NULL,
-  `sectionId` varchar(8) NOT NULL,
-  `semester` varchar(6) NOT NULL,
-  `year` int(11) NOT NULL,
-  `type` varchar(3) NOT NULL,
-  `grade` varchar(4) DEFAULT NULL,
-  `finished` tinyint(1) NOT NULL DEFAULT '0',
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`),
-  KEY `studentId` (`studentId`),
-  KEY `cId` (`cId`,`sectionId`,`semester`,`year`,`type`),
-  CONSTRAINT `registered_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `students` (`sId`)
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8;
+CREATE TABLE `students` (
+  `sId` int(11) NOT NULL,
+  `firstName` varchar(50) NOT NULL,
+  `lastName` varchar(50) NOT NULL,
+  `email` varchar(60) NOT NULL,
+  `password` varchar(30) NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`sId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `registered`
+-- Dumping data for table `students`
 --
 
-LOCK TABLES `registered` WRITE;
-/*!40000 ALTER TABLE `registered` DISABLE KEYS */;
-/*!40000 ALTER TABLE `registered` ENABLE KEYS */;
+LOCK TABLES `students` WRITE;
+/*!40000 ALTER TABLE `students` DISABLE KEYS */;
+INSERT INTO `students` VALUES (54353,'new','user','new_user','1234'),(10001011,'Vince','Lasalle','vLasalle@gmail.com','recess'),(10001110,'Gus','Griswald','gGriswald@gmail.com','qwerty'),(10001222,'Mikey','Blumberg','mBlumberg@gmail.com','password1234'),(10001235,'T.J','Detweiler','TJDetweiller@gmail.com','asdfasdf'),(10001343,'Gretchen','Grundler','gGrundler@gmail.com','safetyfirst'),(10002032,'Ashley','Spinelli','flashGordon4Life@gmail.com','flashGordon');
+/*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -59,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-10 14:07:51
+-- Dump completed on 2016-04-13  0:24:37

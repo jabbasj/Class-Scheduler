@@ -18,28 +18,36 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `sequence`
+-- Table structure for table `registered`
 --
 
-DROP TABLE IF EXISTS `sequence`;
+DROP TABLE IF EXISTS `registered`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sequence` (
+CREATE TABLE `registered` (
+  `studentId` int(11) NOT NULL,
   `cId` varchar(8) NOT NULL,
+  `sectionId` varchar(8) NOT NULL,
   `semester` varchar(6) NOT NULL,
   `year` int(11) NOT NULL,
-  PRIMARY KEY (`cId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `type` varchar(3) NOT NULL,
+  `grade` varchar(4) DEFAULT NULL,
+  `finished` tinyint(1) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`),
+  KEY `studentId` (`studentId`),
+  KEY `cId` (`cId`,`sectionId`,`semester`,`year`,`type`),
+  CONSTRAINT `registered_ibfk_1` FOREIGN KEY (`studentId`) REFERENCES `students` (`sId`)
+) ENGINE=InnoDB AUTO_INCREMENT=204 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `sequence`
+-- Dumping data for table `registered`
 --
 
-LOCK TABLES `sequence` WRITE;
-/*!40000 ALTER TABLE `sequence` DISABLE KEYS */;
-INSERT INTO `sequence` VALUES ('BIOL 206','cegep',-1),('BIOL 261','cegep',-1),('CHEM 221','cegep',-1),('COEN 346','Winter',1),('COMP 232','Fall',0),('COMP 248','Fall',0),('COMP 249','Winter',0),('COMP 335','Summer',2),('COMP 345','Winter',0),('COMP 346','Fall',2),('COMP 348','Fall',1),('COMP 352','Winter',1),('COMP 353','Fall',1),('COMP 371','Winter',1),('COMP 426','Summer',1),('COMP 428','Fall',2),('COMP 442','Fall',3),('COMP 445','Winter',3),('ELEC 273','Winter',1),('ELEC 275','Fall',2),('ELEC 321','Summer',1),('ENCS 272','Fall',-1),('ENCS 282','Summer',1),('ENGR 201','Fall',0),('ENGR 202','Summer',0),('ENGR 213','Fall',0),('ENGR 233','Summer',0),('ENGR 242','Fall',1),('ENGR 243','Fall',1),('ENGR 251','Fall',1),('ENGR 301','Summer',3),('ENGR 361','Winter',1),('ENGR 371','Fall',2),('ENGR 391','Winter',2),('ENGR 392','Winter',3),('MECH 221','Winter',0),('PHYS 252','cegep',-1),('SOEN 228','Winter',0),('SOEN 287','Winter',0),('SOEN 321','Summer',3),('SOEN 331','Fall',2),('SOEN 341','Summer',2),('SOEN 342','Winter',2),('SOEN 343','Winter',2),('SOEN 344','Fall',3),('SOEN 345','Fall',3),('SOEN 357','Fall',3),('SOEN 384','Winter',2),('SOEN 385','Winter',3),('SOEN 390','Fall',3);
-/*!40000 ALTER TABLE `sequence` ENABLE KEYS */;
+LOCK TABLES `registered` WRITE;
+/*!40000 ALTER TABLE `registered` DISABLE KEYS */;
+/*!40000 ALTER TABLE `registered` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-10 14:07:51
+-- Dump completed on 2016-04-13  0:24:38

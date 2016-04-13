@@ -18,30 +18,29 @@ USE `soen341_project`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `students`
+-- Table structure for table `django_content_type`
 --
 
-DROP TABLE IF EXISTS `students`;
+DROP TABLE IF EXISTS `django_content_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `students` (
-  `sId` int(11) NOT NULL,
-  `firstName` varchar(50) NOT NULL,
-  `lastName` varchar(50) NOT NULL,
-  `email` varchar(60) NOT NULL,
-  `password` varchar(30) NOT NULL DEFAULT 'default',
-  PRIMARY KEY (`sId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `django_content_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app_label` varchar(100) NOT NULL,
+  `model` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `django_content_type_app_label_76bd3d3b_uniq` (`app_label`,`model`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `students`
+-- Dumping data for table `django_content_type`
 --
 
-LOCK TABLES `students` WRITE;
-/*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (54353,'new','user','new_user','1234'),(10001011,'Vince','Lasalle','vLasalle@gmail.com','recess'),(10001110,'Gus','Griswald','gGriswald@gmail.com','qwerty'),(10001222,'Mikey','Blumberg','mBlumberg@gmail.com','password1234'),(10001235,'T.J','Detweiler','TJDetweiller@gmail.com','asdfasdf'),(10001343,'Gretchen','Grundler','gGrundler@gmail.com','safetyfirst'),(10002032,'Ashley','Spinelli','flashGordon4Life@gmail.com','flashGordon');
-/*!40000 ALTER TABLE `students` ENABLE KEYS */;
+LOCK TABLES `django_content_type` WRITE;
+/*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
+INSERT INTO `django_content_type` VALUES (7,'admin','logentry'),(15,'app','authuser'),(10,'app','courses'),(11,'app','prerequisites'),(12,'app','registered'),(14,'app','sequence'),(13,'app','students'),(9,'app','timeslots'),(2,'auth','group'),(1,'auth','permission'),(3,'auth','user'),(4,'contenttypes','contenttype'),(5,'sessions','session'),(6,'sites','site');
+/*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-10 14:07:51
+-- Dump completed on 2016-04-13  0:24:38

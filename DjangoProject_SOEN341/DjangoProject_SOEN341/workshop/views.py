@@ -79,7 +79,7 @@ def get_suggested_sequence(request):
         chosen_year = request.session['year']
         
     try:            
-        suggested_sequence = get_sequence(chosen_semester, chosen_year)
+        suggested_sequence = get_sequence(chosen_semester, chosen_year, request)
         
     except Exception as e:            
         suggested_sequence = []
@@ -87,11 +87,22 @@ def get_suggested_sequence(request):
     return chosen_semester, chosen_year, suggested_sequence
 
 # gets suggested sequence for a semester/year
-def get_sequence(chosen_semester, chosen_year):
+def get_sequence(chosen_semester, chosen_year, request):
     suggested_sequence = []
     c_year = int(chosen_year) - 2016
+
     try:
-        suggested_sequence = Sequence.objects.filter(semester = chosen_semester, year = c_year)
+        if chosen_semester != "Summer" and not (chosen_semester == "Winter" and chosen_year=="2016"):
+            entire_sequence = Sequence.objects.all().order_by('year', '-semester')
+            courses_registered = Registered.objects.filter(studentid=Students.objects.get(email=request.user).sid)
+
+            currently_registered = Registered.objects.filter(studentid=Students.objects.get(email=request.user).sid, year=int(chosen_year), semester=chosen_semester)
+
+            registered_cids = get_cids(courses_registered)
+
+            for sequence_item in entire_sequence:
+                if sequence_item.cid not in registered_cids and len(suggested_sequence) < 5:
+                    suggested_sequence.append(sequence_item)
 
     except Exception as e:
         suggested_sequence = []
@@ -560,7 +571,7 @@ def remove_completed_by_student(request, courses):
     if (courses != None):
         try:
             for i in courses:
-                if check_if_course_passed(request, i) == False:
+                if check_if_course_passed(request, i.cid.cid) == False:
                     not_completed_yet.append(i)
 
         except Exception as e:
@@ -632,10 +643,9 @@ def check_if_course_passed(request, courseid):
             if chosen_year > registered_course[0].year:
                 return True
 
-            #wrong semester sequence logic
             if chosen_year == registered_course[0].year:
                 if chosen_semester != registered_course[0].semester:
-                    if chosen_semester == 'Summer' or (chosen_semester == 'Winter' and registered_course[0].semester == 'Fall'):
+                    if chosen_semester == 'Fall' or (chosen_semester == 'Summer' and registered_course[0].semester == 'Winter'):
                         return True
 
 
@@ -680,7 +690,7 @@ def remove_full_courses(request, courses):
 
     return courses_with_capacity
 
-def max_credits_registered(lec, courses_registered, MAX = 12):
+def max_credits_registered(lec, courses_registered, MAX = 17):
     try:
         total_credits_registered = 0
 
@@ -781,7 +791,7 @@ def checkDay(course, dow):
     return False
 
 
-# returns cids from given courses
+# returns cids from given registered objects
 def get_cids(courses):
     cids_list = []
     for i in courses:
