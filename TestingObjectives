@@ -1,0 +1,55 @@
+Software measurement
+
+Software Testing
+Testing process
+	Standards: IEEE 829 / 829 Standard for Software and System Test Documentation
+		Template follows a typical use case: 
+-	Description of test procedure
+-	Purpose / goal
+-	Functional requirements (input, behavior and output)
+-	Procedure steps
+
+Test management
+	Test suite summary
+o	Test cases focus on those aspects:
+	Functionality
+	Performance
+	Reliability
+	Security
+	Integration
+	Usability
+The status reports promote the reusability of test cases by specifying the scope and overview of each test suite. 
+o	Status reports
+-	Project title (including version)
+-	Planned start date / Planned end date
+-	Actual start date / Actual end date
+-	Scope
+-	Overview
+-	Resources (platforms, environments – requirements from test case)
+-	Staff 
+-	Risks 
+	Product / quality risk, example: reliability defect causes system crash
+	Project / planning risk, example: the actual outcome does not respond to the right timing or budgetary objectives. 
+ 
+
+Code quality checklist
+Date	Requirement	Checklist 	
+	Short functions	
+	Good naming	
+	Clear division of responsibility	
+	High cohesion	
+	Low coupling	
+	Appropriate use of OO	
+	Minimal code	
+
+ 
+Annexe
+
+Short functions: Long functions make the code hard to follow
+Good naming: good naming convention
+Clear division of responsibility: It is important that it is clear which function or class is responsible for any given aspect of the design.
+High cohesion: Cohesion is a measure of how closely related the data items and functions in a class or module are to each other. 
+Low coupling: Classes and modules should not have unnecessary dependencies between them.
+Appropriate use of OO and other techniques: This is also related to the division of responsibilities, but it goes beyond that — is this code structure the most appropriate for handling this particular responsibility?
+Minimal code: Code should be short and to-the-point. 
+
